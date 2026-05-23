@@ -26,10 +26,14 @@ export interface WorkEntry {
 
 export interface Project {
   name: string;
-  description: string; // max 100 words
+  slug: string;
+  description: string;
   technologies: string[];
   demoUrl: string | null;
   repoUrl: string | null;
+  role: string;
+  architecture: string;
+  features: string[];
 }
 
 export interface SocialLink {
