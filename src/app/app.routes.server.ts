@@ -9,6 +9,10 @@ export const serverRoutes: ServerRoute[] = [
       PROJECTS_DATA.map(p => ({ slug: p.slug })),
   },
   {
+    path: 'games',
+    renderMode: RenderMode.Client,
+  },
+  {
     path: '**',
     renderMode: RenderMode.Prerender,
   },

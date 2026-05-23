@@ -6,6 +6,7 @@ import { AboutSectionComponent } from '../../sections/about/about-section.compon
 import { SkillsSectionComponent } from '../../sections/skills/skills-section.component';
 import { ExperienceSectionComponent } from '../../sections/experience/experience-section.component';
 import { ProjectsSectionComponent } from '../../sections/projects/projects-section.component';
+import { ExtracurricularSectionComponent } from '../../sections/extracurricular/extracurricular-section.component';
 import { ContactSectionComponent } from '../../sections/contact/contact-section.component';
 
 @Component({
@@ -17,6 +18,7 @@ import { ContactSectionComponent } from '../../sections/contact/contact-section.
     SkillsSectionComponent,
     ExperienceSectionComponent,
     ProjectsSectionComponent,
+    ExtracurricularSectionComponent,
     ContactSectionComponent,
   ],
   template: `
@@ -26,6 +28,7 @@ import { ContactSectionComponent } from '../../sections/contact/contact-section.
       <app-skills-section />
       <app-experience-section />
       <app-projects-section />
+      <app-extracurricular-section />
       <app-contact-section />
     </main>
   `,

@@ -1,7 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PROJECTS_DATA } from '../../core/models/portfolio.data';
 import type { Project } from '../../core/models/portfolio.models';
+
+const TYPE_META: Record<
+  string,
+  { label: string; icon: string; runNote: string; runHow: string }
+> = {
+  web:         { label: 'Web App',               icon: '🌐', runNote: '', runHow: '' },
+  mobile:      { label: 'Android App',           icon: '📱', runNote: 'This is an Android application and cannot run in the browser.', runHow: 'Clone the repo and open it in Android Studio to build and run on an emulator or device.' },
+  desktop:     { label: 'Desktop App',           icon: '🖥️', runNote: 'This is a Windows desktop application and cannot run in the browser.', runHow: 'Clone the repo and open it in Visual Studio to build and run on Windows.' },
+  backend:     { label: 'Backend / Server',      icon: '⚙️', runNote: 'This is a server-side application — there is no visual browser interface.', runHow: 'Clone the repo and follow the README for build and run instructions.' },
+  competitive: { label: 'Competitive Programming', icon: '🏆', runNote: 'These are standalone C++ solutions — not a runnable app.', runHow: 'Each file is a self-contained Codeforces solution. Compile any file with a C++ compiler to run it.' },
+};
 
 @Component({
   selector: 'app-project-detail-page',
@@ -9,8 +21,8 @@ import type { Project } from '../../core/models/portfolio.models';
   imports: [RouterLink],
   template: `
     @if (project) {
-      <main role="main" class="min-h-screen bg-(--color-bg) py-16 px-4">
-        <div class="max-w-4xl mx-auto">
+      <main role="main" class="min-h-screen bg-(--color-bg) py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto">
 
           <a
             routerLink="/"
@@ -20,24 +32,65 @@ import type { Project } from '../../core/models/portfolio.models';
           </a>
 
           <div class="mb-8">
-            <span class="inline-block rounded-full bg-(--color-primary) text-white text-xs font-semibold px-4 py-1 mb-4">
-              {{ project.role }}
-            </span>
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <span class="inline-block rounded-full bg-(--color-primary) text-white text-xs font-semibold px-4 py-1">
+                {{ project.role }}
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-(--color-border) bg-(--color-surface) text-xs font-medium px-3 py-1 text-(--color-text-muted)">
+                <span aria-hidden="true">{{ meta.icon }}</span> {{ meta.label }}
+              </span>
+            </div>
             <h1 class="text-4xl font-extrabold text-(--color-text) mb-4">{{ project.name }}</h1>
             <p class="text-lg text-(--color-text-muted) leading-relaxed">{{ project.description }}</p>
           </div>
 
-          <div
-            class="rounded-xl border border-(--color-border) bg-(--color-surface) h-56 flex flex-col items-center justify-center mb-10 gap-2"
-            aria-label="Project screenshot placeholder"
-          >
-            <svg class="w-10 h-10 opacity-25 text-(--color-text-muted)" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p class="text-sm text-(--color-text-muted)">UI screenshots coming soon</p>
-          </div>
+          @if (project.projectType === 'web' && project.demoUrl) {
+            <div class="mb-10">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="text-xl font-bold text-(--color-text)">Live Demo</h2>
+                <a
+                  [href]="project.demoUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-sm text-(--color-primary) hover:underline"
+                >Open in new tab ↗</a>
+              </div>
+              <div class="rounded-xl border border-(--color-border) overflow-hidden shadow-sm" style="height: 480px">
+                <iframe
+                  [src]="safeDemoUrl"
+                  [title]="project.name + ' live demo'"
+                  class="w-full h-full"
+                  loading="lazy"
+                  sandbox="allow-scripts allow-same-origin allow-forms"
+                ></iframe>
+              </div>
+            </div>
+          } @else if (project.projectType !== 'web' || !project.demoUrl) {
+            <div class="mb-10 rounded-xl border border-(--color-border) bg-(--color-surface) p-6">
+              <div class="flex items-start gap-4">
+                <span class="text-3xl mt-0.5" aria-hidden="true">{{ meta.icon }}</span>
+                <div>
+                  <h2 class="text-base font-bold text-(--color-text) mb-1">{{ meta.label }}</h2>
+                  @if (meta.runNote) {
+                    <p class="text-sm text-(--color-text-muted) mb-2">{{ meta.runNote }}</p>
+                    <p class="text-sm text-(--color-text)">{{ meta.runHow }}</p>
+                  } @else {
+                    <p class="text-sm text-(--color-text-muted)">No live demo is hosted for this project yet.</p>
+                  }
+                  @if (project.repoUrl) {
+                    <a
+                      [href]="project.repoUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center mt-4 text-sm text-(--color-primary) font-semibold hover:underline"
+                    >View source on GitHub →</a>
+                  }
+                </div>
+              </div>
+            </div>
+          }
 
-          <div class="grid md:grid-cols-2 gap-8 mb-10">
+          <div class="grid md:grid-cols-2 gap-8 lg:gap-12 mb-10">
             <div>
               <h2 class="text-xl font-bold text-(--color-text) mb-3">Architecture</h2>
               <p class="text-(--color-text-muted) leading-relaxed text-sm">{{ project.architecture }}</p>
@@ -105,10 +158,20 @@ import type { Project } from '../../core/models/portfolio.models';
 })
 export class ProjectDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private sanitizer = inject(DomSanitizer);
+
   project: Project | null = null;
+  meta = TYPE_META['web'];
+  safeDemoUrl: SafeResourceUrl | null = null;
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
     this.project = PROJECTS_DATA.find(p => p.slug === slug) ?? null;
+    if (this.project) {
+      this.meta = TYPE_META[this.project.projectType] ?? TYPE_META['web'];
+      if (this.project.demoUrl) {
+        this.safeDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.demoUrl);
+      }
+    }
   }
 }

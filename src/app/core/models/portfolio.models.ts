@@ -3,6 +3,7 @@ export interface HeroData {
   title: string;
   tagline: string;
   resumeUrl: string | null;
+  openToWork: boolean;
 }
 
 export interface AboutData {
@@ -34,6 +35,7 @@ export interface Project {
   role: string;
   architecture: string;
   features: string[];
+  projectType: 'web' | 'mobile' | 'desktop' | 'backend' | 'competitive';
 }
 
 export interface SocialLink {

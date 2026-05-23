@@ -14,10 +14,11 @@ export const HERO_DATA: HeroData = {
   tagline:
     'I build web, desktop, and mobile applications — passionate about clean code and solving real-world problems.',
   resumeUrl: '/assets/resume.pdf',
+  openToWork: true,
 };
 
 export const ABOUT_DATA: AboutData = {
-  photoUrl: 'https://avatars.githubusercontent.com/u/183318977?v=4',
+  photoUrl: '/images/akib-ashfaq.jpeg',
   photoAlt: 'Profile photo of Akib Ashfaq',
   biography: `I'm a software developer based in Dhaka, Bangladesh, studying at AIUB (American International University — Bangladesh). I work across the full stack — from Angular-powered web apps to Kotlin Android apps and C# desktop applications.
 
@@ -142,6 +143,7 @@ export const PROJECTS_DATA: Project[] = [
       'WCAG 2.1 AA accessible markup with semantic HTML and ARIA attributes',
       'Reactive contact form with validation using Angular Reactive Forms',
     ],
+    projectType: 'web',
   },
   {
     name: 'AIUB App',
@@ -160,6 +162,7 @@ export const PROJECTS_DATA: Project[] = [
       'Student portal features for course and university management',
       'Clean, maintainable Kotlin codebase following Android best practices',
     ],
+    projectType: 'mobile',
   },
   {
     name: 'DeskShop',
@@ -180,6 +183,7 @@ export const PROJECTS_DATA: Project[] = [
       'LINQ queries for efficient data retrieval and filtering',
       'Event-driven UI with WinForms controls and custom validators',
     ],
+    projectType: 'desktop',
   },
   {
     name: 'E-Commerce Management Portal',
@@ -200,6 +204,7 @@ export const PROJECTS_DATA: Project[] = [
       'Responsive admin dashboard built with Bootstrap',
       'MySQL relational schema for products, orders, and transactions',
     ],
+    projectType: 'web',
   },
   {
     name: 'Java Streaming Platform',
@@ -218,6 +223,7 @@ export const PROJECTS_DATA: Project[] = [
       'Object-oriented domain model with clean separation of concerns',
       'Java Collections API for efficient in-memory data handling',
     ],
+    projectType: 'backend',
   },
   {
     name: 'Advanced .NET Programming',
@@ -237,6 +243,7 @@ export const PROJECTS_DATA: Project[] = [
       'Design pattern implementations (factory, observer, etc.)',
       'ADO.NET database access examples',
     ],
+    projectType: 'desktop',
   },
   {
     name: 'HTML Calculator',
@@ -255,24 +262,7 @@ export const PROJECTS_DATA: Project[] = [
       'Keyboard input support for faster usage',
       'Deployed to GitHub Pages for live access',
     ],
-  },
-  {
-    name: 'CodeForce Solve Set',
-    slug: 'codeforces-solutions',
-    description:
-      'A growing collection of competitive programming solutions from Codeforces, saved as a personal progress tracker. Spans sorting, binary search, dynamic programming, and graph algorithms.',
-    technologies: ['C++', 'Algorithms', 'Data Structures'],
-    demoUrl: null,
-    repoUrl: 'https://github.com/AkibAshfaq/CodeForce-Solve-set',
-    role: 'Competitive Programmer',
-    architecture:
-      'Standalone C++ source files organized by problem ID. Each file is a self-contained solution following competitive programming conventions with fast I/O and efficient algorithm implementations.',
-    features: [
-      'Algorithmic problems from Codeforces difficulty A to C+',
-      'Topics: sorting, binary search, greedy, dynamic programming, graph traversal',
-      'Continuous progress tracker for skill development',
-      'Clean C++ solutions for review and learning',
-    ],
+    projectType: 'web',
   },
 ];
 
@@ -290,7 +280,7 @@ export const CONTACT_DATA: ContactData = {
     },
     {
       platform: 'LinkedIn',
-      url: 'https://linkedin.com/in/akib-ashfaq',
+      url: 'https://linkedin.com/in/AkibAshfaq',
       ariaLabel: 'Connect with Akib Ashfaq on LinkedIn',
     },
   ],

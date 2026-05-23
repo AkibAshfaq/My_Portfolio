@@ -9,11 +9,11 @@ const INITIAL_COUNT = 3;
   standalone: true,
   imports: [ProjectCardComponent],
   template: `
-    <section id="projects" aria-label="Projects" role="region" class="py-20 bg-(--color-bg)">
-      <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-(--color-text) mb-10 text-center">Projects</h2>
+    <section id="projects" aria-label="Projects" role="region" class="py-20 lg:py-28 bg-(--color-bg)">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-10 lg:mb-14 text-center">Projects</h2>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8">
           @for (project of visibleProjects(); track project.name) {
             <app-project-card [project]="project" />
           }
