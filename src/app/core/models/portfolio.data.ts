@@ -10,21 +10,22 @@ import type {
 
 export const HERO_DATA: HeroData = {
   name: 'Akib Ashfaq',
-  title: 'Full-Stack & Android Developer',
+  title: 'Software Engineer',
   tagline:
     'I build web, desktop, and mobile applications — passionate about clean code and solving real-world problems.',
-  resumeUrl: '/assets/resume.pdf',
+  resumeUrl: 'https://drive.usercontent.google.com/download?id=10xDvIDeeyaIPBiD44xNsrlNijTNCBCYi&export=download&authuser=1&confirm=t&uuid=a4752568-7f98-4f76-a9a3-5cafbf510111&at=ALBwUgmc6VPbZGO86v8kHD0I4l4S:1779562805294',
   openToWork: true,
+  location: 'Dhaka, Bangladesh',
 };
 
 export const ABOUT_DATA: AboutData = {
   photoUrl: '/images/akib-ashfaq.jpeg',
   photoAlt: 'Profile photo of Akib Ashfaq',
-  biography: `I'm a software developer based in Dhaka, Bangladesh, studying at AIUB (American International University — Bangladesh). I work across the full stack — from Angular-powered web apps to Kotlin Android apps and C# desktop applications.
+  biography: `I'm a software developer based in Dhaka, Bangladesh, studying at AIUB (American International University Bangladesh). I work primarily in backend development building APIs, server-side logic, and system architecture.
 
-My project journey spans competitive programming in C++, web development with PHP and JavaScript, mobile development with Kotlin, and desktop apps with C# WinForms. I'm always learning — exploring new languages, frameworks, and problem-solving techniques.
+My project journey spans competitive programming in C++, backend web development with PHP and JavaScript, mobile development with Kotlin, and desktop apps with C# WinForms. I'm always learning exploring new languages, frameworks, and problem-solving techniques.
 
-I believe great software is built by people who understand both the code and the users it serves. When I'm not coding, I'm solving algorithmic challenges on Codeforces or experimenting with IoT hardware like the ESP32.`,
+I believe great software is built by people who understand both the code and the systems it runs on. When I'm not coding, I'm solving algorithmic challenges on Codeforces or experimenting with IoT hardware like the ESP32.`
 };
 
 export const SKILLS_DATA: SkillCategory[] = [

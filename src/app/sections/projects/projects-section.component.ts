@@ -1,15 +1,17 @@
 import { Component, signal, computed } from '@angular/core';
 import { PROJECTS_DATA } from '../../core/models/portfolio.data';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
+import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
 
 const INITIAL_COUNT = 3;
 
 @Component({
   selector: 'app-projects-section',
   standalone: true,
-  imports: [ProjectCardComponent],
+  imports: [ProjectCardComponent, TechDecorComponent],
   template: `
-    <section id="projects" aria-label="Projects" role="region" class="py-20 lg:py-28 bg-(--color-bg)">
+    <section id="projects" aria-label="Projects" role="region" class="relative py-20 lg:py-28 bg-(--color-bg) overflow-hidden">
+      <app-tech-decor [seed]="0" />
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-10 lg:mb-14 text-center">Projects</h2>
 

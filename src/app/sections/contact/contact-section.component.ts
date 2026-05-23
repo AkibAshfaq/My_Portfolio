@@ -2,18 +2,20 @@ import { Component } from '@angular/core';
 import { ContactFormComponent } from './contact-form/contact-form.component';
 import { CONTACT_DATA } from '../../core/models/portfolio.data';
 import type { SocialLink } from '../../core/models/portfolio.models';
+import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
 
 @Component({
   selector: 'app-contact-section',
   standalone: true,
-  imports: [ContactFormComponent],
+  imports: [ContactFormComponent, TechDecorComponent],
   template: `
     <section
       id="contact"
       aria-label="Contact"
       role="region"
-      class="py-20 lg:py-28 bg-(--color-surface)"
+      class="relative py-20 lg:py-28 bg-(--color-surface) overflow-hidden"
     >
+      <app-tech-decor [seed]="1" />
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-2 text-center">Get In Touch</h2>
         <p class="text-center text-(--color-text-muted) mb-10 lg:mb-14 text-sm">

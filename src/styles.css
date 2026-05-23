@@ -4,13 +4,14 @@
 
 @layer base {
   :root {
-    --color-bg: oklch(98% 0 0);
-    --color-surface: oklch(94% 0 0);
-    --color-text: oklch(15% 0 0);
-    --color-text-muted: oklch(45% 0 0);
-    --color-primary: oklch(55% 0.2 260);
-    --color-primary-hover: oklch(48% 0.2 260);
-    --color-border: oklch(85% 0 0);
+    /* Techy light theme — cool blue-tinted off-white bg, pure white cards */
+    --color-bg:           oklch(96.5% 0.010 245);  /* subtle blue-cool background  */
+    --color-surface:      oklch(100%  0     0);     /* pure white cards — pops clean */
+    --color-text:         oklch(13%   0.030 262);   /* deep blue-black, like IDE text */
+    --color-text-muted:   oklch(44%   0.025 255);   /* blue-gray muted               */
+    --color-primary:      oklch(52%   0.280 264);   /* electric indigo               */
+    --color-primary-hover:oklch(45%   0.280 264);
+    --color-border:       oklch(87%   0.018 242);   /* crisp blue-tinted border      */
   }
 
   .dark {
@@ -26,5 +27,22 @@
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-optical-sizing: auto;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, kbd, samp {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  }
+}
+
+@theme {
+  --font-sans:  'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
 }

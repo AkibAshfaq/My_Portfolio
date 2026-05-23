@@ -1,9 +1,27 @@
+export interface HeroStat {
+  label: string;
+  /** One or more SVG <path> d-attribute strings (stroke-based, 24×24 viewBox) */
+  paths: string[];
+}
+
 export interface HeroData {
   name: string;
   title: string;
   tagline: string;
   resumeUrl: string | null;
   openToWork: boolean;
+  location: string;
+}
+
+/** Live data fetched from the GitHub API. */
+export interface GitHubStats {
+  publicRepos: number;
+  languageCount: number;
+  languages: string[];
+  followers: number;
+  memberSince: string;   // e.g. "Sep 2024"
+  avatarUrl: string;
+  totalStars: number;
 }
 
 export interface AboutData {

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
 
 interface IotProject {
   name: string;
@@ -10,13 +11,14 @@ interface IotProject {
 @Component({
   selector: 'app-extracurricular-section',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TechDecorComponent],
   template: `
     <section
       aria-label="Extra-Curricular Activities"
       role="region"
-      class="py-20 lg:py-28 bg-(--color-bg)"
+      class="relative py-20 lg:py-28 bg-(--color-bg) overflow-hidden"
     >
+      <app-tech-decor [seed]="2" />
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-2 text-center">Beyond the Code</h2>
         <p class="text-center text-(--color-text-muted) mb-10 lg:mb-14 text-sm">
@@ -35,21 +37,52 @@ interface IotProject {
               </div>
             </div>
             <p class="text-sm text-(--color-text-muted) leading-relaxed">
-              I build mini games to explore canvas rendering, game loops, and interactive programming.
-              Currently: a fully playable Snake game with keyboard &amp; touch controls — written in
-              TypeScript with HTML Canvas.
+              I build mini games from scratch to explore canvas rendering, game physics, and interactive
+              programming — no game engines, just TypeScript and HTML Canvas.
             </p>
             <ul class="flex flex-wrap gap-2">
               <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">TypeScript</span></li>
               <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">HTML Canvas</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Game Loop</span></li>
+              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Game Physics</span></li>
+              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Angular</span></li>
             </ul>
-            <a
-              routerLink="/games"
-              class="mt-auto inline-flex items-center gap-2 rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) self-start"
-            >
-              Play Now →
-            </a>
+
+            <!-- Game list -->
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-(--color-text)">🐍 Snake</p>
+                  <p class="text-xs text-(--color-text-muted)">Classic snake — eat, grow, don't crash</p>
+                </div>
+                <a
+                  routerLink="/games"
+                  aria-label="Play Snake"
+                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+                >Play →</a>
+              </div>
+              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-(--color-text)">🍄 Mario Run</p>
+                  <p class="text-xs text-(--color-text-muted)">Platformer — jump, stomp, collect coins</p>
+                </div>
+                <a
+                  routerLink="/games"
+                  aria-label="Play Mario Run"
+                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+                >Play →</a>
+              </div>
+              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-(--color-text)">🚗 Road Rush</p>
+                  <p class="text-xs text-(--color-text-muted)">Top-down car dodger — survive traffic</p>
+                </div>
+                <a
+                  routerLink="/games"
+                  aria-label="Play Road Rush"
+                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+                >Play →</a>
+              </div>
+            </div>
           </div>
 
           <!-- Competitive Programming -->
@@ -72,23 +105,34 @@ interface IotProject {
               <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Codeforces</span></li>
               <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">LeetCode</span></li>
             </ul>
-            <div class="mt-auto flex flex-wrap gap-3">
-              <a
-                href="https://codeforces.com/profile/AkibAshfaq"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 rounded-lg bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-              >
-                Codeforces →
-              </a>
-              <a
-                href="https://leetcode.com/u/AkibAshfaq"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-2 text-sm font-semibold text-(--color-text) transition-colors hover:bg-(--color-surface) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-              >
-                LeetCode →
-              </a>
+            <!-- Platform list -->
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-(--color-text)">⚔️ Codeforces</p>
+                  <p class="text-xs text-(--color-text-muted)">Rated contests & algorithmic problems</p>
+                </div>
+                <a
+                  href="https://codeforces.com/profile/AkibAshfaq"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit Codeforces profile"
+                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+                >Visit →</a>
+              </div>
+              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-(--color-text)">🧩 LeetCode</p>
+                  <p class="text-xs text-(--color-text-muted)">DSA practice & interview prep</p>
+                </div>
+                <a
+                  href="https://leetcode.com/u/AkibAshfaq"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit LeetCode profile"
+                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+                >Visit →</a>
+              </div>
             </div>
           </div>
 

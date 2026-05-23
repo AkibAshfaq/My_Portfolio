@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { SKILLS_DATA } from '../../core/models/portfolio.data';
 import { SkillBadgeComponent } from '../../shared/components/skill-badge/skill-badge.component';
+import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
 
 @Component({
   selector: 'app-skills-section',
   standalone: true,
-  imports: [SkillBadgeComponent],
+  imports: [SkillBadgeComponent, TechDecorComponent],
   template: `
     <section
       id="skills"
       aria-label="Skills"
       role="region"
-      class="py-20 lg:py-28 bg-(--color-bg)"
+      class="relative py-20 lg:py-28 bg-(--color-bg) overflow-hidden"
     >
+      <app-tech-decor [seed]="2" />
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-10 lg:mb-14 text-center">Skills</h2>
         <div class="xl:grid xl:grid-cols-2 xl:gap-x-16">

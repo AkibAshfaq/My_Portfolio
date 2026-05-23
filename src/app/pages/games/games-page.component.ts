@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SnakeGameComponent } from './snake-game/snake-game.component';
 import { MarioGameComponent } from './mario-game/mario-game.component';
+import { CarGameComponent } from './car-game/car-game.component';
 
 @Component({
   selector: 'app-games-page',
   standalone: true,
-  imports: [RouterLink, SnakeGameComponent, MarioGameComponent],
+  imports: [RouterLink, SnakeGameComponent, MarioGameComponent, CarGameComponent],
   template: `
     <main role="main" class="min-h-screen bg-(--color-bg) py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
@@ -64,6 +65,27 @@ import { MarioGameComponent } from './mario-game/mario-game.component';
             </div>
           </div>
           <app-mario-game />
+        </div>
+
+        <!-- Road Rush -->
+        <div class="rounded-2xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm mt-8">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="text-3xl mt-0.5" aria-hidden="true">🚗</div>
+            <div>
+              <h2 class="text-xl font-bold text-(--color-text)">Road Rush</h2>
+              <p class="text-sm text-(--color-text-muted) mt-1">
+                Top-down 2D car dodging game — survive traffic, rack up distance, beat your best.
+                Built from scratch with HTML Canvas &amp; TypeScript.
+              </p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">TypeScript</span>
+                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">HTML Canvas</span>
+                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Angular</span>
+                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Game Physics</span>
+              </div>
+            </div>
+          </div>
+          <app-car-game />
         </div>
 
         <p class="text-center text-xs text-(--color-text-muted) mt-8">
