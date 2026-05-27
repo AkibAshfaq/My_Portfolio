@@ -16,7 +16,7 @@ interface IotProject {
     <section
       aria-label="Extra-Curricular Activities"
       role="region"
-      class="relative py-20 lg:py-28 bg-(--color-bg) overflow-hidden"
+      class="relative py-16 lg:py-28 bg-(--color-bg) overflow-hidden"
     >
       <app-tech-decor [seed]="2" />
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,13 +25,14 @@ interface IotProject {
           Things I build and do outside of assignments and work
         </p>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <!-- Single column on mobile → 3 columns on desktop -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
 
           <!-- Game Development -->
-          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center gap-3">
-              <span class="text-3xl" aria-hidden="true">🎮</span>
-              <div>
+              <span class="text-3xl shrink-0" aria-hidden="true">🎮</span>
+              <div class="min-w-0">
                 <h3 class="text-lg font-bold text-(--color-text)">Game Development</h3>
                 <p class="text-xs text-(--color-text-muted) font-medium uppercase tracking-wide">Extra-Curricular</p>
               </div>
@@ -48,48 +49,28 @@ interface IotProject {
             </ul>
 
             <!-- Game list -->
-            <div class="flex flex-col gap-3">
-              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                <div class="min-w-0">
-                  <p class="text-sm font-semibold text-(--color-text)">🐍 Snake</p>
-                  <p class="text-xs text-(--color-text-muted)">Classic snake — eat, grow, don't crash</p>
+            <div class="flex flex-col gap-2.5">
+              @for (game of games; track game.label) {
+                <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-(--color-text)">{{ game.emoji }} {{ game.label }}</p>
+                    <p class="text-xs text-(--color-text-muted) truncate">{{ game.description }}</p>
+                  </div>
+                  <a
+                    routerLink="/games"
+                    [attr.aria-label]="'Play ' + game.label"
+                    class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+                  >Play →</a>
                 </div>
-                <a
-                  routerLink="/games"
-                  aria-label="Play Snake"
-                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                >Play →</a>
-              </div>
-              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                <div class="min-w-0">
-                  <p class="text-sm font-semibold text-(--color-text)">🍄 Mario Run</p>
-                  <p class="text-xs text-(--color-text-muted)">Platformer — jump, stomp, collect coins</p>
-                </div>
-                <a
-                  routerLink="/games"
-                  aria-label="Play Mario Run"
-                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                >Play →</a>
-              </div>
-              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                <div class="min-w-0">
-                  <p class="text-sm font-semibold text-(--color-text)">🚗 Road Rush</p>
-                  <p class="text-xs text-(--color-text-muted)">Top-down car dodger — survive traffic</p>
-                </div>
-                <a
-                  routerLink="/games"
-                  aria-label="Play Road Rush"
-                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                >Play →</a>
-              </div>
+              }
             </div>
           </div>
 
           <!-- Competitive Programming -->
-          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center gap-3">
-              <span class="text-3xl" aria-hidden="true">🏆</span>
-              <div>
+              <span class="text-3xl shrink-0" aria-hidden="true">🏆</span>
+              <div class="min-w-0">
                 <h3 class="text-lg font-bold text-(--color-text)">Competitive Programming</h3>
                 <p class="text-xs text-(--color-text-muted) font-medium uppercase tracking-wide">Extra-Curricular</p>
               </div>
@@ -105,12 +86,13 @@ interface IotProject {
               <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Codeforces</span></li>
               <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">LeetCode</span></li>
             </ul>
+
             <!-- Platform list -->
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2.5">
               <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
                 <div class="min-w-0">
                   <p class="text-sm font-semibold text-(--color-text)">⚔️ Codeforces</p>
-                  <p class="text-xs text-(--color-text-muted)">Rated contests & algorithmic problems</p>
+                  <p class="text-xs text-(--color-text-muted) truncate">Rated contests & algorithmic problems</p>
                 </div>
                 <a
                   href="https://codeforces.com/profile/AkibAshfaq"
@@ -123,7 +105,7 @@ interface IotProject {
               <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
                 <div class="min-w-0">
                   <p class="text-sm font-semibold text-(--color-text)">🧩 LeetCode</p>
-                  <p class="text-xs text-(--color-text-muted)">DSA practice & interview prep</p>
+                  <p class="text-xs text-(--color-text-muted) truncate">DSA practice & interview prep</p>
                 </div>
                 <a
                   href="https://leetcode.com/u/AkibAshfaq"
@@ -137,10 +119,10 @@ interface IotProject {
           </div>
 
           <!-- IoT & Hardware -->
-          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
+          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
             <div class="flex items-center gap-3">
-              <span class="text-3xl" aria-hidden="true">⚡</span>
-              <div>
+              <span class="text-3xl shrink-0" aria-hidden="true">⚡</span>
+              <div class="min-w-0">
                 <h3 class="text-lg font-bold text-(--color-text)">IoT &amp; Hardware</h3>
                 <p class="text-xs text-(--color-text-muted) font-medium uppercase tracking-wide">Extra-Curricular</p>
               </div>
@@ -158,7 +140,7 @@ interface IotProject {
             </ul>
 
             <!-- IoT project list -->
-            <div class="mt-1 flex flex-col gap-3">
+            <div class="flex flex-col gap-2.5">
               @for (project of iotProjects; track project.name) {
                 <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
                   <div class="min-w-0">
@@ -169,11 +151,9 @@ interface IotProject {
                     [href]="project.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="View {{ project.name }} on GitHub"
+                    [attr.aria-label]="'View ' + project.name + ' on GitHub'"
                     class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                  >
-                    GitHub →
-                  </a>
+                  >GitHub →</a>
                 </div>
               }
             </div>
@@ -185,6 +165,12 @@ interface IotProject {
   `,
 })
 export class ExtracurricularSectionComponent {
+  readonly games = [
+    { emoji: '🐍', label: 'Snake',     description: 'Classic snake — eat, grow, don\'t crash' },
+    { emoji: '🍄', label: 'Mario Run', description: 'Platformer — jump, stomp, collect coins'  },
+    { emoji: '🚗', label: 'Road Rush', description: 'Top-down car dodger — survive traffic'     },
+  ];
+
   readonly iotProjects: IotProject[] = [
     {
       name: 'ESP32 WiFi Board',
