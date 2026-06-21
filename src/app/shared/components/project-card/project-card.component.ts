@@ -8,7 +8,7 @@ import { Project } from '../../../core/models/portfolio.models';
   imports: [RouterLink],
   template: `
     <article
-      class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm transition-shadow hover:shadow-md"
+      class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm transition-shadow hover:shadow-md h-full"
     >
       <h3 class="text-xl font-semibold text-(--color-text)">{{ project().name }}</h3>
 

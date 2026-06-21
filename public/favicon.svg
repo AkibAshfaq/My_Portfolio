@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark background -->
+  <rect width="32" height="32" rx="5" fill="#0f0f1a"/>
+  <!-- Pixel art A (7x7 grid, 4px per pixel, 2px padding) -->
+  <!-- Row 0: cols 2,3,4 -->
+  <rect x="10" y="2" width="4" height="4" fill="#818cf8"/>
+  <rect x="14" y="2" width="4" height="4" fill="#818cf8"/>
+  <rect x="18" y="2" width="4" height="4" fill="#818cf8"/>
+  <!-- Row 1: cols 1,5 -->
+  <rect x="6"  y="6" width="4" height="4" fill="#818cf8"/>
+  <rect x="22" y="6" width="4" height="4" fill="#818cf8"/>
+  <!-- Row 2: cols 0,6 -->
+  <rect x="2"  y="10" width="4" height="4" fill="#818cf8"/>
+  <rect x="26" y="10" width="4" height="4" fill="#818cf8"/>
+  <!-- Row 3: cols 0,6 -->
+  <rect x="2"  y="14" width="4" height="4" fill="#818cf8"/>
+  <rect x="26" y="14" width="4" height="4" fill="#818cf8"/>
+  <!-- Row 4: all cols (crossbar) -->
+  <rect x="2"  y="18" width="4" height="4" fill="#818cf8"/>
+  <rect x="6"  y="18" width="4" height="4" fill="#818cf8"/>
+  <rect x="10" y="18" width="4" height="4" fill="#818cf8"/>
+  <rect x="14" y="18" width="4" height="4" fill="#818cf8"/>
+  <rect x="18" y="18" width="4" height="4" fill="#818cf8"/>
+  <rect x="22" y="18" width="4" height="4" fill="#818cf8"/>
+  <rect x="26" y="18" width="4" height="4" fill="#818cf8"/>
+  <!-- Row 5: cols 0,6 -->
+  <rect x="2"  y="22" width="4" height="4" fill="#818cf8"/>
+  <rect x="26" y="22" width="4" height="4" fill="#818cf8"/>
+  <!-- Row 6: cols 0,6 -->
+  <rect x="2"  y="26" width="4" height="4" fill="#818cf8"/>
+  <rect x="26" y="26" width="4" height="4" fill="#818cf8"/>
+</svg>

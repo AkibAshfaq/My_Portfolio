@@ -12,8 +12,8 @@ export const HERO_DATA: HeroData = {
   name: 'Akib Ashfaq',
   title: 'Software Engineer',
   tagline:
-    'I build web, desktop, and mobile applications — passionate about clean code and solving real-world problems.',
-  resumeUrl: 'https://drive.usercontent.google.com/download?id=10xDvIDeeyaIPBiD44xNsrlNijTNCBCYi&export=download&authuser=1&confirm=t&uuid=a4752568-7f98-4f76-a9a3-5cafbf510111&at=ALBwUgmc6VPbZGO86v8kHD0I4l4S:1779562805294',
+    'Passionate about building software and solving real-world problems.',
+  resumeUrl: '/AkibAshfaq_CV.pdf',
   openToWork: true,
   location: 'Dhaka, Bangladesh',
 };
@@ -288,7 +288,7 @@ export const CONTACT_DATA: ContactData = {
 };
 
 export const HOME_SEO: SeoConfig = {
-  title: 'Akib Ashfaq — Full-Stack & Android Developer',
+  title: 'Akib Ashfaq',
   description:
     'Personal portfolio of Akib Ashfaq, a software developer from Dhaka, Bangladesh specialising in Angular, C#, Kotlin, and PHP.',
   ogTitle: 'Akib Ashfaq — Full-Stack & Android Developer',
