@@ -11,7 +11,7 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
   imports: [TerminalComponent],
   template: `
     <section id="hero" aria-labelledby="hero-title" class="border-b border-(--color-border) pt-14">
-      <div class="container-page grid items-center gap-10 py-14 lg:grid-cols-[1fr_minmax(0,34rem)] lg:gap-14 lg:py-24">
+      <div class="container-page grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-14 lg:py-24 xl:gap-20 2xl:py-32">
 
         <!-- Recruiter summary -->
         <div>
@@ -22,11 +22,11 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
             {{ hero.title }} &#64; {{ hero.company }}
           </p>
 
-          <h1 id="hero-title" class="text-4xl font-semibold text-(--color-text) sm:text-5xl lg:text-6xl">
+          <h1 id="hero-title" class="text-4xl font-semibold text-(--color-text) sm:text-5xl lg:text-6xl 2xl:text-7xl">
             {{ hero.name }}<span class="cursor-blink ml-2" aria-hidden="true"></span>
           </h1>
           <p class="mt-4 font-mono text-lg text-(--color-primary) sm:text-xl">{{ hero.title }} — .NET &amp; Backend</p>
-          <p class="mt-4 max-w-xl text-lg leading-relaxed text-(--color-text-muted)">{{ hero.tagline }}</p>
+          <p class="mt-4 max-w-2xl text-lg leading-relaxed text-(--color-text-muted)">{{ hero.tagline }}</p>
 
           <div class="mt-8 flex flex-wrap gap-3">
             @if (hero.resumeUrl) {
@@ -39,7 +39,7 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
             <button type="button" class="btn" (click)="scroll.scrollTo('contact')">Contact</button>
           </div>
 
-          <dl class="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-4 border-t border-(--color-border) pt-6 sm:grid-cols-4">
+          <dl class="mt-10 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-4 border-t border-(--color-border) pt-6 sm:grid-cols-4">
             @for (fact of facts(); track fact.label) {
               <div>
                 <dt class="label">{{ fact.label }}</dt>
@@ -50,7 +50,7 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
         </div>
 
         <!-- Interactive shell -->
-        <div class="term-window flex h-[26rem] flex-col shadow-xl shadow-black/10 sm:h-[30rem]">
+        <div class="term-window flex h-[26rem] flex-col shadow-xl shadow-black/10 sm:h-[30rem] 2xl:h-[34rem]">
           <div class="term-titlebar justify-between">
             <span class="flex items-center gap-3">
               <span class="term-dots" aria-hidden="true"><span></span><span></span><span></span></span>

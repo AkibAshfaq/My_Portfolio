@@ -10,7 +10,7 @@ import { CarGameComponent } from './car-game/car-game.component';
   imports: [RouterLink, SnakeGameComponent, MarioGameComponent, CarGameComponent],
   template: `
     <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
-      <div class="container-page max-w-4xl py-12 lg:py-16">
+      <div class="container-page py-12 lg:py-16">
         <a routerLink="/" class="btn btn-sm mb-10"><span class="text-(--color-text-muted)">$</span> cd ~</a>
 
         <p class="mb-2 font-mono text-sm text-(--color-text-muted)" aria-hidden="true">

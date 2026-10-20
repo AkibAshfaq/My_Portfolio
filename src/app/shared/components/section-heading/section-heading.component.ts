@@ -12,7 +12,7 @@ import { Component, input } from '@angular/core';
       </p>
       <h2 [id]="headingId() || null" class="text-2xl font-semibold text-(--color-text) sm:text-3xl">{{ title() }}</h2>
       @if (subtitle()) {
-        <p class="mt-2 max-w-2xl text-(--color-text-muted)">{{ subtitle() }}</p>
+        <p class="mt-2 max-w-3xl text-(--color-text-muted)">{{ subtitle() }}</p>
       }
     </header>
   `,

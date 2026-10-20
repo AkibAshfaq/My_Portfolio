@@ -14,8 +14,8 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
       <div class="container-page">
         <app-section-heading headingId="about-title" command="cat about.md" title="About" />
 
-        <div class="grid gap-10 lg:grid-cols-[1fr_21rem] lg:gap-14">
-            <div class="max-w-3xl space-y-4 text-[1.0625rem] leading-relaxed text-(--color-text)">
+        <div class="grid gap-10 lg:grid-cols-[1fr_22rem] lg:gap-14 xl:gap-20 2xl:grid-cols-[1fr_26rem]">
+            <div class="max-w-4xl space-y-4 text-[1.0625rem] leading-relaxed text-(--color-text)">
               @for (para of paragraphs; track $index) {
                 <p>{{ para }}</p>
               }

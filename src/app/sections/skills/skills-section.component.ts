@@ -11,7 +11,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
       <div class="container-page">
         <app-section-heading headingId="skills-title" command="skills --list" title="Skills" subtitle="Languages, frameworks and tools I use to ship software." />
 
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:gap-5">
           @for (category of skills; track category.name; let i = $index) {
             <div class="term-window">
               <h3 class="term-titlebar justify-between">

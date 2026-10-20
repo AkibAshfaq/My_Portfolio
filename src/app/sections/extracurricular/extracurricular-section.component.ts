@@ -29,7 +29,7 @@ interface Group {
         <app-section-heading headingId="beyond-title" command="ls ~/side-projects" title="Beyond the code"
           subtitle="Things I build and practise outside of coursework." />
 
-        <div class="grid gap-4 lg:grid-cols-3">
+        <div class="grid gap-4 lg:grid-cols-3 xl:gap-5">
           @for (group of groups; track group.title) {
             <article class="term-window flex flex-col">
               <div class="term-titlebar">{{ group.path }}</div>
