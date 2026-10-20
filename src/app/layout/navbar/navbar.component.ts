@@ -48,9 +48,6 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
             </li>
           }
           <li>
-            <a routerLink="/cv" routerLinkActive="text-(--color-primary) bg-(--color-surface-2)" class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] text-(--color-text-muted) hover:text-(--color-text)">./cv</a>
-          </li>
-          <li>
             <a routerLink="/games" routerLinkActive="text-(--color-primary) bg-(--color-surface-2)" class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] text-(--color-text-muted) hover:text-(--color-text)">./games</a>
           </li>
         </ul>
@@ -104,11 +101,6 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
               </button>
             </li>
           }
-          <li>
-            <a routerLink="/cv" (click)="menuOpen.set(false)" class="block py-2.5 text-(--color-text) hover:text-(--color-primary)">
-              <span class="text-(--color-text-muted)">cd</span> cv/
-            </a>
-          </li>
           <li>
             <a routerLink="/games" (click)="menuOpen.set(false)" class="block py-2.5 text-(--color-text) hover:text-(--color-primary)">
               <span class="text-(--color-text-muted)">cd</span> games/
