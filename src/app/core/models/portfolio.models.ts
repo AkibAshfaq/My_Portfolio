@@ -9,7 +9,6 @@ export interface HeroData {
   title: string;
   tagline: string;
   resumeUrl: string | null;
-  company: string;
   location: string;
 }
 

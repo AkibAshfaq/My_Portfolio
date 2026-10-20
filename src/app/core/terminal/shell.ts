@@ -156,7 +156,7 @@ export const COMMANDS: Record<string, CommandDef> = {
     run: () =>
       out(
         { text: HERO_DATA.name, tone: 'accent' },
-        `${HERO_DATA.title} @ ${HERO_DATA.company} · ${HERO_DATA.location}`,
+        `${HERO_DATA.title} · ${HERO_DATA.location}`,
         HERO_DATA.tagline,
         { text: 'stack: .NET · C# · MongoDB · Redis · modular monolith · DDD', tone: 'info' },
       ),

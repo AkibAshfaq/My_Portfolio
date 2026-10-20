@@ -44,7 +44,7 @@ import { formatEndDate, sortExperienceEntries } from '../../core/utils/experienc
             <header>
               <p class="text-(--color-text-muted)" aria-hidden="true"><span class="text-(--color-primary)">akib&#64;portfolio</span>:<span class="text-(--color-info)">~/cv</span>$ cat cv.txt</p>
               <h1 class="mt-3 text-3xl font-semibold text-(--color-text) sm:text-4xl">{{ hero.name }}</h1>
-              <p class="mt-1 text-base text-(--color-primary)">{{ hero.title }} &#64; {{ hero.company }} · {{ hero.location }}</p>
+              <p class="mt-1 text-base text-(--color-primary)">{{ hero.title }} · {{ hero.location }}</p>
               <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-1">
                 <li><span class="text-(--color-text-muted)">email:</span> <a [href]="'mailto:' + email" class="link">{{ email }}</a></li>
                 <li><span class="text-(--color-text-muted)">github:</span> <a [href]="github" target="_blank" rel="noopener noreferrer" class="link">github.com/AkibAshfaq</a></li>
