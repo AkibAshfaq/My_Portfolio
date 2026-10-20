@@ -1,37 +1,53 @@
-import { Component, signal, computed } from '@angular/core';
-import { PROJECTS_DATA } from '../../core/models/portfolio.data';
+import { Component, computed, inject } from '@angular/core';
+import { UiStateService } from '../../core/services/ui-state.service';
+import { PROJECTS_DATA, PROJECT_CATEGORIES } from '../../core/models/portfolio.data';
+import type { ProjectType } from '../../core/models/portfolio.models';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
-import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
+import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
 
-const INITIAL_COUNT = 3;
+const INITIAL_COUNT = 6;
 
 @Component({
   selector: 'app-projects-section',
   standalone: true,
-  imports: [ProjectCardComponent, TechDecorComponent],
+  imports: [ProjectCardComponent, SectionHeadingComponent],
   template: `
-    <section id="projects" aria-label="Projects" role="region" class="relative py-20 lg:py-28 bg-(--color-bg) overflow-hidden">
-      <app-tech-decor [seed]="0" />
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-10 lg:mb-14 text-center">Projects</h2>
+    <section id="projects" aria-labelledby="projects-title" class="border-b border-(--color-border) bg-(--color-surface-2)/40 py-20 lg:py-24">
+      <div class="container-page">
+        <app-section-heading headingId="projects-title" [command]="command()" title="Projects"
+          subtitle="Work across backend, web, desktop and mobile, plus games, hardware and competitive programming." />
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8">
-          @for (project of visibleProjects(); track project.name) {
-            <app-project-card [project]="project" />
-          }
+        <div class="mb-6 flex flex-wrap items-center gap-3 font-mono text-sm">
+          <label for="project-category" class="text-(--color-text-muted)">--category</label>
+          <div class="relative">
+            <select
+              id="project-category"
+              class="btn appearance-none pr-9 text-(--color-text)"
+              (change)="selectCategory($any($event.target).value)"
+            >
+              @for (c of categories; track c.value) {
+                <option [value]="c.value" [selected]="c.value === category()">{{ c.label }} ({{ countFor(c.value) }})</option>
+              }
+            </select>
+            <svg class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-(--color-text-muted)" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <p class="text-(--color-text-muted)" role="status">{{ filtered().length }} {{ filtered().length === 1 ? 'entry' : 'entries' }}</p>
         </div>
 
-        @if (projects.length > initialCount) {
-          <div class="mt-10 text-center">
-            <button
-              type="button"
-              (click)="toggleExpand()"
-              class="inline-flex items-center gap-2 rounded-xl border border-(--color-border) bg-(--color-surface) px-6 py-3 text-sm font-semibold text-(--color-text) shadow-sm transition-colors hover:bg-(--color-bg) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-            >
+        <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-5">
+          @for (project of visible(); track project.slug) {
+            <li><app-project-card [project]="project" /></li>
+          }
+        </ul>
+
+        @if (filtered().length > initialCount) {
+          <div class="mt-8">
+            <button type="button" (click)="expanded.update(v => !v)" class="btn" [attr.aria-expanded]="expanded()">
               @if (expanded()) {
-                Show Less
+                <span class="text-(--color-text-muted)">$</span> ls | head -{{ initialCount }}
               } @else {
-                Show More ({{ projects.length - initialCount }} more)
+                <span class="text-(--color-text-muted)">$</span> ls --all
+                <span class="text-(--color-text-muted)">(+{{ filtered().length - initialCount }})</span>
               }
             </button>
           </div>
@@ -41,15 +57,32 @@ const INITIAL_COUNT = 3;
   `,
 })
 export class ProjectsSectionComponent {
-  readonly projects = PROJECTS_DATA;
+  readonly categories = PROJECT_CATEGORIES;
   readonly initialCount = INITIAL_COUNT;
-  readonly expanded = signal(false);
+  private readonly ui = inject(UiStateService);
+  /** Kept in a service so the filter survives visiting a project and coming back. */
+  readonly category = this.ui.projectCategory;
+  readonly expanded = this.ui.projectsExpanded;
 
-  readonly visibleProjects = computed(() =>
-    this.expanded() ? this.projects : this.projects.slice(0, INITIAL_COUNT)
+  readonly filtered = computed(() => {
+    const c = this.category();
+    return c === 'all' ? PROJECTS_DATA : PROJECTS_DATA.filter(p => p.projectType === c);
+  });
+
+  readonly visible = computed(() =>
+    this.expanded() ? this.filtered() : this.filtered().slice(0, INITIAL_COUNT),
   );
 
-  toggleExpand(): void {
-    this.expanded.update(v => !v);
+  readonly command = computed(() =>
+    this.category() === 'all' ? 'ls -l ~/projects' : `ls -l ~/projects --category=${this.category()}`,
+  );
+
+  countFor(value: ProjectType | 'all'): number {
+    return value === 'all' ? PROJECTS_DATA.length : PROJECTS_DATA.filter(p => p.projectType === value).length;
+  }
+
+  selectCategory(value: ProjectType | 'all'): void {
+    this.category.set(value);
+    this.expanded.set(false);
   }
 }

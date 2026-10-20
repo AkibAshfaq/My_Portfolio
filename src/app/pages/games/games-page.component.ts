@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { BackLinkComponent } from '../../shared/components/back-link/back-link.component';
 import { SnakeGameComponent } from './snake-game/snake-game.component';
 import { MarioGameComponent } from './mario-game/mario-game.component';
 import { CarGameComponent } from './car-game/car-game.component';
@@ -7,93 +7,70 @@ import { CarGameComponent } from './car-game/car-game.component';
 @Component({
   selector: 'app-games-page',
   standalone: true,
-  imports: [RouterLink, SnakeGameComponent, MarioGameComponent, CarGameComponent],
+  imports: [BackLinkComponent, SnakeGameComponent, MarioGameComponent, CarGameComponent],
   template: `
-    <main role="main" class="min-h-screen bg-(--color-bg) py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-4xl mx-auto">
+    <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
+      <div class="container-page py-12 lg:py-16">
+        <app-back-link class="mb-10 inline-block" fallback="/" />
 
-        <a
-          routerLink="/"
-          class="inline-flex items-center gap-2 text-(--color-primary) hover:underline mb-10 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) rounded"
-        >
-          ← Back to Portfolio
-        </a>
-
-        <div class="text-center mb-10">
-          <h1 class="text-4xl font-extrabold text-(--color-text) mb-3">Games</h1>
-          <p class="text-(--color-text-muted) text-sm">
-            Mini projects built for fun — part of my extra-curricular coding experiments.
-          </p>
-        </div>
-
-        <div class="rounded-2xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm">
-          <div class="flex items-start gap-4 mb-6">
-            <div class="text-3xl mt-0.5" aria-hidden="true">🐍</div>
-            <div>
-              <h2 class="text-xl font-bold text-(--color-text)">Snake</h2>
-              <p class="text-sm text-(--color-text-muted) mt-1">
-                Classic snake game — built from scratch with HTML Canvas &amp; TypeScript.
-                Keyboard + mobile swipe controls.
-              </p>
-              <div class="flex flex-wrap gap-2 mt-3">
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">TypeScript</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">HTML Canvas</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Angular</span>
-              </div>
-            </div>
-          </div>
-
-          <app-snake-game />
-        </div>
-
-        <!-- Mario Run -->
-        <div class="rounded-2xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm mt-8">
-          <div class="flex items-start gap-4 mb-6">
-            <div class="text-3xl mt-0.5" aria-hidden="true">🍄</div>
-            <div>
-              <h2 class="text-xl font-bold text-(--color-text)">Mario Run</h2>
-              <p class="text-sm text-(--color-text-muted) mt-1">
-                Side-scrolling platformer — run, jump, stomp enemies and collect coins.
-                Built from scratch with HTML Canvas &amp; TypeScript.
-              </p>
-              <div class="flex flex-wrap gap-2 mt-3">
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">TypeScript</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">HTML Canvas</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Angular</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Game Physics</span>
-              </div>
-            </div>
-          </div>
-          <app-mario-game />
-        </div>
-
-        <!-- Road Rush -->
-        <div class="rounded-2xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm mt-8">
-          <div class="flex items-start gap-4 mb-6">
-            <div class="text-3xl mt-0.5" aria-hidden="true">🚗</div>
-            <div>
-              <h2 class="text-xl font-bold text-(--color-text)">Road Rush</h2>
-              <p class="text-sm text-(--color-text-muted) mt-1">
-                Top-down 2D car dodging game — survive traffic, rack up distance, beat your best.
-                Built from scratch with HTML Canvas &amp; TypeScript.
-              </p>
-              <div class="flex flex-wrap gap-2 mt-3">
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">TypeScript</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">HTML Canvas</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Angular</span>
-                <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Game Physics</span>
-              </div>
-            </div>
-          </div>
-          <app-car-game />
-        </div>
-
-        <p class="text-center text-xs text-(--color-text-muted) mt-8">
-          More games coming soon — this space grows as I experiment more.
+        <p class="mb-2 font-mono text-sm text-(--color-text-muted)" aria-hidden="true">
+          <span class="text-(--color-primary)">akib&#64;portfolio</span>:<span class="text-(--color-info)">~/games</span>$
+          <span class="text-(--color-text)">ls</span>
+        </p>
+        <h1 class="text-3xl font-semibold text-(--color-text) sm:text-4xl">Games</h1>
+        <p class="mt-3 max-w-2xl text-(--color-text-muted)">
+          Mini games built from scratch with HTML Canvas and TypeScript — a side project for learning
+          rendering loops, collision detection and input handling.
         </p>
 
+        <div class="mt-10 space-y-8">
+          @for (game of games; track game.id) {
+            <section class="term-window" [attr.aria-labelledby]="game.id">
+              <div class="term-titlebar justify-between">
+                <span class="flex items-center gap-3">
+                  <span class="term-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                  ./{{ game.bin }}
+                </span>
+                <span class="hidden sm:inline">{{ game.tags }}</span>
+              </div>
+              <div class="p-4 sm:p-6">
+                <h2 [id]="game.id" class="text-lg font-semibold text-(--color-text)">{{ game.title }}</h2>
+                <p class="mb-5 mt-1 text-[0.9375rem] text-(--color-text-muted)">{{ game.description }}</p>
+                @switch (game.id) {
+                  @case ('snake') { <app-snake-game /> }
+                  @case ('mario') { <app-mario-game /> }
+                  @case ('road') { <app-car-game /> }
+                }
+              </div>
+            </section>
+          }
+        </div>
       </div>
     </main>
   `,
 })
-export class GamesPageComponent {}
+export class GamesPageComponent {
+  readonly games = [
+    {
+      id: 'snake',
+      bin: 'snake',
+      title: 'Snake',
+      tags: 'TypeScript · Canvas',
+      description: 'Classic snake — keyboard and mobile swipe controls.',
+    },
+    {
+      id: 'mario',
+      bin: 'mario-run',
+      title: 'Mario Run',
+      tags: 'TypeScript · Canvas · Physics',
+      description: 'Side-scrolling platformer — run, jump, stomp enemies and collect coins.',
+    },
+    {
+      id: 'road',
+      bin: 'road-rush',
+      title: 'Road Rush',
+      tags: 'TypeScript · Canvas · Physics',
+      description: 'Top-down car dodger — survive traffic, rack up distance, beat your best.',
+    },
+  ];
+}

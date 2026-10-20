@@ -9,7 +9,6 @@ export interface HeroData {
   title: string;
   tagline: string;
   resumeUrl: string | null;
-  openToWork: boolean;
   location: string;
 }
 
@@ -25,8 +24,6 @@ export interface GitHubStats {
 }
 
 export interface AboutData {
-  photoUrl: string;
-  photoAlt: string;
   biography: string; // max 300 words
 }
 
@@ -51,10 +48,17 @@ export interface Project {
   demoUrl: string | null;
   repoUrl: string | null;
   role: string;
-  architecture: string;
-  features: string[];
-  projectType: 'web' | 'mobile' | 'desktop' | 'backend' | 'competitive';
+  /** Architecture notes and features power the detail page; entries without them link out directly. */
+  architecture?: string;
+  features?: string[];
+  projectType: ProjectType;
+  /** In-site route for something playable, e.g. '/games'. */
+  playRoute?: string;
+  /** External profile page (e.g. Codeforces). */
+  profileUrl?: string;
 }
+
+export type ProjectType = 'web' | 'backend' | 'mobile' | 'desktop' | 'game' | 'iot' | 'competitive';
 
 export interface SocialLink {
   platform: string;
@@ -78,7 +82,6 @@ export interface SeoConfig {
 export type Theme = 'light' | 'dark';
 export type SectionId =
   | 'hero'
-  | 'about'
   | 'skills'
   | 'experience'
   | 'projects'

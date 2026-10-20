@@ -1,4 +1,5 @@
 import type {
+  ProjectType,
   HeroData,
   AboutData,
   SkillCategory,
@@ -12,114 +13,58 @@ export const HERO_DATA: HeroData = {
   name: 'Akib Ashfaq',
   title: 'Software Engineer',
   tagline:
-    'Passionate about building software and solving real-world problems.',
+    'I build and maintain large-scale .NET systems, with a focus on clean architecture, performance and maintainable domain models.',
   resumeUrl: '/AkibAshfaq_CV.pdf',
-  openToWork: true,
   location: 'Dhaka, Bangladesh',
 };
 
 export const ABOUT_DATA: AboutData = {
-  photoUrl: '/images/akib-ashfaq.jpeg',
-  photoAlt: 'Profile photo of Akib Ashfaq',
-  biography: `I'm a software developer based in Dhaka, Bangladesh, studying at AIUB (American International University Bangladesh). I work primarily in backend development building APIs, server-side logic, and system architecture.
+  biography: `I am a Software Engineer based in Dhaka, contributing to a large-scale, high-traffic platform built on .NET. My work centres on backend engineering: designing APIs, implementing business logic and building data-access layers that perform reliably under production load.
 
-My project journey spans competitive programming in C++, backend web development with PHP and JavaScript, mobile development with Kotlin, and desktop apps with C# WinForms. I'm always learning exploring new languages, frameworks, and problem-solving techniques.
+I focus on architecture that stays maintainable as systems and teams grow. I apply modular monolith principles to keep clear module boundaries within a single deployable, and Domain-Driven Design to model complex business domains through bounded contexts, aggregates and a shared ubiquitous language.
 
-I believe great software is built by people who understand both the code and the systems it runs on. When I'm not coding, I'm solving algorithmic challenges on Codeforces or experimenting with IoT hardware like the ESP32.`
+My core stack is C# and ASP.NET Core, with MongoDB and SQL Server for persistence and Redis for caching, delivered through a disciplined Git Flow release process. I studied Computer Science and Engineering at American International University-Bangladesh (AIUB), and I continue to sharpen my problem-solving through competitive programming.`
 };
 
 export const SKILLS_DATA: SkillCategory[] = [
   {
+    name: '.NET & C#',
+    skills: ['C#', '.NET', 'ASP.NET Core', 'Web API', 'Entity Framework Core', 'LINQ', 'WinForms'],
+  },
+  {
+    name: 'Architecture & Design',
+    skills: ['Modular Monolith', 'Domain-Driven Design', 'Bounded Contexts', 'Clean Architecture', 'REST APIs', 'Large-scale systems'],
+  },
+  {
+    name: 'Databases & Caching',
+    skills: ['MongoDB', 'Redis', 'SQL Server', 'MySQL'],
+  },
+  {
     name: 'Programming Languages',
-    skills: ['JavaScript', 'TypeScript', 'C#', 'Java', 'Kotlin', 'PHP', 'C++'],
+    skills: ['C#', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'PHP', 'C++'],
   },
   {
     name: 'Web & Frontend',
-    skills: ['HTML5', 'CSS3', 'Angular', 'Tailwind CSS', 'Bootstrap'],
+    skills: ['Angular', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap'],
   },
   {
-    name: 'Mobile & Desktop',
-    skills: ['Android (Kotlin)', 'WinForms (.NET)', 'Jetpack Navigation', 'Material Design'],
-  },
-  {
-    name: 'Backend & Databases',
-    skills: ['PHP', 'Java', 'ASP.NET', 'MySQL', 'SQL Server', 'REST APIs'],
-  },
-  {
-    name: 'Tools & Others',
-    skills: ['Git', 'GitHub', 'Android Studio', 'Visual Studio', 'VS Code', 'Arduino / ESP32'],
+    name: 'Tools & Workflow',
+    skills: ['Git', 'Git Flow', 'GitHub', 'Google Cloud Console', 'Visual Studio', 'VS Code'],
   },
 ];
 
 export const EXPERIENCE_DATA: WorkEntry[] = [
   {
-    company: 'Angular Portfolio — My Portfolio',
-    jobTitle: 'Full-Stack Developer (Angular / TypeScript)',
-    startDate: '2026-05',
+    company: 'Bdjobs Ltd',
+    jobTitle: 'Software Engineer',
+    startDate: '2026-08',
     endDate: null,
     responsibilities: [
-      'Built a personal portfolio with Angular 21, SSR, and Tailwind CSS.',
-      'Implemented dark/light theme switching, smooth scrolling, and responsive design.',
-      'Set up server-side rendering with Angular Universal and Express.',
-      'Wrote accessible, WCAG-compliant markup with semantic HTML.',
-    ],
-  },
-  {
-    company: 'Academic Project — AIUB App',
-    jobTitle: 'Android Developer (Kotlin)',
-    startDate: '2025-12',
-    endDate: null,
-    responsibilities: [
-      'Developed an Android application for AIUB university portal management in Kotlin.',
-      'Implemented multiple screens using Android Navigation Component.',
-      'Applied Material Design 3 components for a modern, consistent UI.',
-      'Integrated API calls for live university data.',
-    ],
-  },
-  {
-    company: 'Personal Project — E-Commerce Management Portal',
-    jobTitle: 'Web Developer (PHP / MySQL)',
-    startDate: '2025-09',
-    endDate: '2025-11',
-    responsibilities: [
-      'Built a full-featured web-based e-commerce management and accountant portal using PHP.',
-      'Implemented product inventory management, sales tracking, and financial reporting.',
-      'Designed a MySQL database schema for products, orders, and transactions.',
-      'Created a responsive admin dashboard with JavaScript and Bootstrap.',
-    ],
-  },
-  {
-    company: 'Personal Project — Java Streaming Platform',
-    jobTitle: 'Backend Developer (Java)',
-    startDate: '2025-08',
-    endDate: '2025-09',
-    responsibilities: [
-      'Developed a media streaming backend platform in Java.',
-      'Implemented content management and streaming logic.',
-      'Applied object-oriented design principles and Java best practices.',
-    ],
-  },
-  {
-    company: 'Academic Project — DeskShop',
-    jobTitle: 'Desktop Developer (C# / .NET)',
-    startDate: '2025-01',
-    endDate: '2025-10',
-    responsibilities: [
-      'Built DeskShop, a Windows desktop e-commerce application as a university C# course project.',
-      'Implemented product catalog, shopping cart, checkout, and order history with WinForms.',
-      'Designed a relational SQL Server database for products, users, and orders.',
-      'Applied LINQ, delegates, and event-driven programming throughout.',
-    ],
-  },
-  {
-    company: 'Self-Learning — Competitive Programming',
-    jobTitle: 'Competitive Programmer (C++)',
-    startDate: '2024-12',
-    endDate: null,
-    responsibilities: [
-      'Actively solving algorithmic problems on Codeforces using C++.',
-      'Topics include: sorting, binary search, dynamic programming, and graph algorithms.',
-      'Building problem-solving skills and algorithmic thinking progressively.',
+      'Develop and maintain features on a large-scale, high-traffic .NET platform.',
+      'Build backend services and APIs in C# / ASP.NET Core following a modular monolith architecture.',
+      'Apply Domain-Driven Design to model business logic with bounded contexts and aggregates.',
+      'Work with MongoDB for persistence and Redis for caching to keep responses fast under load.',
+      'Ship through a Git Flow branching and release workflow, and manage services in Google Cloud Console.',
     ],
   },
 ];
@@ -265,6 +210,131 @@ export const PROJECTS_DATA: Project[] = [
     ],
     projectType: 'web',
   },
+  {
+    name: 'ShopingAPI',
+    slug: 'shoping-api',
+    description:
+      'A RESTful e-commerce API built with ASP.NET Core and MySQL: cart, checkout, payment and delivery-status tracking, plus inventory management for staff.',
+    technologies: ['ASP.NET Core', 'C#', 'MySQL', 'REST API'],
+    demoUrl: null,
+    repoUrl: 'https://github.com/AkibAshfaq/ShopingAPI',
+    role: 'Backend Developer',
+    architecture:
+      'ASP.NET Core Web API organised as a 3-tier application: controllers for the HTTP layer, a service layer for business rules, and a data access layer over MySQL.',
+    features: [
+      'Add to cart, remove from cart, checkout and payment endpoints',
+      'Delivery status tracking for orders',
+      'Inventory management so employees can add and manage products',
+      '3-tier architecture for a clean, maintainable and scalable code structure',
+    ],
+    projectType: 'backend',
+  },
+  {
+    name: 'Snake',
+    slug: 'snake',
+    description: 'Classic snake built from scratch with HTML Canvas and TypeScript — keyboard and swipe controls.',
+    technologies: ['TypeScript', 'HTML Canvas', 'Angular'],
+    demoUrl: null,
+    repoUrl: null,
+    role: 'Game Developer',
+    projectType: 'game',
+    playRoute: '/games',
+  },
+  {
+    name: 'Mario Run',
+    slug: 'mario-run',
+    description: 'Side-scrolling platformer — run, jump, stomp enemies and collect coins. Custom physics, no game engine.',
+    technologies: ['TypeScript', 'HTML Canvas', 'Game physics'],
+    demoUrl: null,
+    repoUrl: null,
+    role: 'Game Developer',
+    projectType: 'game',
+    playRoute: '/games',
+  },
+  {
+    name: 'Road Rush',
+    slug: 'road-rush',
+    description: 'Top-down car dodger — survive traffic, rack up distance and beat your best score.',
+    technologies: ['TypeScript', 'HTML Canvas', 'Game physics'],
+    demoUrl: null,
+    repoUrl: null,
+    role: 'Game Developer',
+    projectType: 'game',
+    playRoute: '/games',
+  },
+  {
+    name: 'TUI Table Tennis Paddle',
+    slug: 'tui-table-tennis-paddle',
+    description:
+      'A motion-controlled input device: an MPU6050 gyroscope/accelerometer on a table tennis paddle drives the mouse cursor in real time.',
+    technologies: ['C++', 'Arduino', 'MPU6050', 'I2C'],
+    demoUrl: null,
+    repoUrl: 'https://github.com/AkibAshfaq/TUI-Based-Table-Tennis-Paddle',
+    role: 'Embedded Developer',
+    architecture:
+      'Embedded C++ on Arduino reading the MPU6050 over I2C (I2Cdev/MPU6050 libraries) and mapping motion data to cursor movement through the Arduino Mouse library.',
+    features: [
+      'Real-time mapping of paddle motion to mouse cursor movement',
+      'Calibration routine averaging 500 gyroscope samples to cancel sensor drift',
+      'Deadzone filtering and exponential smoothing for stable, jitter-free control',
+      'Gesture detection for distinct "flick" and "tilt" motions from accelerometer deltas',
+      'Haptic feedback through a vibration motor with non-blocking timing',
+    ],
+    projectType: 'iot',
+  },
+  {
+    name: 'ESP32 WiFi Board',
+    slug: 'esp32-wifi-board',
+    description: 'Wi-Fi connected ESP32 board for remote control and sensor experiments.',
+    technologies: ['C++', 'ESP32', 'Wi-Fi'],
+    demoUrl: null,
+    repoUrl: 'https://github.com/AkibAshfaq/Esp32-WIFI-Board',
+    role: 'Embedded Developer',
+    projectType: 'iot',
+  },
+  {
+    name: 'Smart Agricultural Automation',
+    slug: 'smart-agri-automation',
+    description: 'Automated soil, temperature and humidity monitoring system for agriculture.',
+    technologies: ['C++', 'Arduino', 'Sensors'],
+    demoUrl: null,
+    repoUrl: 'https://github.com/AkibAshfaq/SMART-AGRICULTURAL-AUTOMATION-SYSTEM',
+    role: 'Embedded Developer',
+    projectType: 'iot',
+  },
+  {
+    name: 'Codeforces',
+    slug: 'codeforces',
+    description: 'Rated contests and algorithmic problem sets in C++: sorting, binary search, dynamic programming and graphs.',
+    technologies: ['C++', 'Algorithms', 'Data structures'],
+    demoUrl: null,
+    repoUrl: null,
+    role: 'Competitive Programmer',
+    projectType: 'competitive',
+    profileUrl: 'https://codeforces.com/profile/AkibAshfaq',
+  },
+  {
+    name: 'LeetCode',
+    slug: 'leetcode',
+    description: 'Data structures and algorithms practice and interview preparation.',
+    technologies: ['C++', 'DSA'],
+    demoUrl: null,
+    repoUrl: null,
+    role: 'Competitive Programmer',
+    projectType: 'competitive',
+    profileUrl: 'https://leetcode.com/u/AkibAshfaq',
+  },
+];
+
+export const PROJECT_CATEGORIES: { value: ProjectType | 'all'; label: string }[] = [
+  { value: 'all', label: 'All projects' },
+  { value: 'backend', label: 'Backend & APIs' },
+  { value: 'web', label: 'Web' },
+  { value: 'desktop', label: 'Desktop' },
+  { value: 'mobile', label: 'Mobile' },
+  { value: 'game', label: 'Games' },
+  { value: 'iot', label: 'IoT & hardware' },
+  { value: 'competitive', label: 'Competitive programming' },
 ];
 
 export const CONTACT_DATA: ContactData = {
@@ -281,7 +351,7 @@ export const CONTACT_DATA: ContactData = {
     },
     {
       platform: 'LinkedIn',
-      url: 'https://linkedin.com/in/AkibAshfaq',
+      url: 'https://www.linkedin.com/in/akib-ashfaq-dev',
       ariaLabel: 'Connect with Akib Ashfaq on LinkedIn',
     },
   ],
@@ -290,10 +360,10 @@ export const CONTACT_DATA: ContactData = {
 export const HOME_SEO: SeoConfig = {
   title: 'Akib Ashfaq',
   description:
-    'Personal portfolio of Akib Ashfaq, a software developer from Dhaka, Bangladesh specialising in Angular, C#, Kotlin, and PHP.',
-  ogTitle: 'Akib Ashfaq — Full-Stack & Android Developer',
+    'Akib Ashfaq — Software Engineer in Dhaka. .NET, modular monolith and Domain-Driven Design, MongoDB, Redis, large-scale systems.',
+  ogTitle: 'Akib Ashfaq — Software Engineer (.NET)',
   ogDescription:
-    'Explore the projects, skills, and journey of Akib Ashfaq, a full-stack and Android developer.',
+    'Software Engineer building large-scale .NET systems with modular monolith architecture and Domain-Driven Design.',
   ogImage: 'https://avatars.githubusercontent.com/u/183318977?v=4',
   ogUrl: 'https://akibashfaq.dev',
 };

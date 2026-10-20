@@ -2,44 +2,33 @@ import { Component, input } from '@angular/core';
 import { WorkEntry } from '../../../core/models/portfolio.models';
 import { formatEndDate } from '../../../core/utils/experience.utils';
 
+/** One journey entry, laid out like a `git log --graph` commit. */
 @Component({
   selector: 'app-timeline-entry',
   standalone: true,
   template: `
-    <div class="relative pl-10 border-l-2 border-(--color-border) pb-32 last:pb-0">
-
-      <!-- Dot marker -->
-      <div
-        class="absolute left-[-9px] top-5 w-4 h-4 rounded-full bg-(--color-primary) border-2 border-(--color-bg)"
+    <article class="relative border-l border-(--color-border) pb-10 pl-7">
+      <span
+        class="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-(--color-bg)"
+        [class]="entry().endDate === null ? 'bg-(--color-primary)' : 'bg-(--color-text-muted)'"
         aria-hidden="true"
-      ></div>
+      ></span>
 
-      <!-- Card -->
-      <div class="rounded-xl border border-(--color-border) bg-(--color-surface) p-6 shadow-sm">
+      <p class="font-mono text-xs text-(--color-warn)">
+        {{ entry().startDate }} → {{ formatEndDate(entry().endDate) }}
+        @if (entry().endDate === null) {
+          <span class="ml-2 rounded border border-(--color-primary)/40 px-1.5 py-px text-(--color-primary)">HEAD</span>
+        }
+      </p>
+      <h3 class="mt-1.5 text-lg font-semibold text-(--color-text)">{{ entry().jobTitle }}</h3>
+      <p class="font-mono text-sm text-(--color-info)">{{ entry().company }}</p>
 
-        <!-- Header row -->
-        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-4">
-          <div>
-            <h3 class="text-lg font-bold text-(--color-text)">{{ entry().company }}</h3>
-            <h4 class="text-base font-medium text-(--color-primary) mt-0.5">{{ entry().jobTitle }}</h4>
-          </div>
-          <span class="shrink-0 text-xs font-medium text-(--color-text-muted) bg-(--color-bg) border border-(--color-border) rounded-full px-3 py-1 self-start mt-1 sm:mt-0">
-            {{ entry().startDate }} – {{ formatEndDate(entry().endDate) }}
-          </span>
-        </div>
-
-        <!-- Divider -->
-        <div class="border-t border-(--color-border) mb-4"></div>
-
-        <!-- Responsibilities -->
-        <ul class="space-y-2.5 list-disc list-inside text-(--color-text)">
-          @for (resp of entry().responsibilities; track resp) {
-            <li class="text-sm leading-relaxed">{{ resp }}</li>
-          }
-        </ul>
-
-      </div>
-    </div>
+      <ul class="mt-3 space-y-1.5 text-[0.9375rem] leading-relaxed text-(--color-text-muted)">
+        @for (resp of entry().responsibilities; track resp) {
+          <li class="flex gap-3"><span class="font-mono text-(--color-text-muted)/60" aria-hidden="true">-</span><span>{{ resp }}</span></li>
+        }
+      </ul>
+    </article>
   `,
 })
 export class TimelineEntryComponent {

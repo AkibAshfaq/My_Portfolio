@@ -2,28 +2,21 @@ import { Component } from '@angular/core';
 import { EXPERIENCE_DATA } from '../../core/models/portfolio.data';
 import { sortExperienceEntries } from '../../core/utils/experience.utils';
 import { TimelineEntryComponent } from '../../shared/components/timeline-entry/timeline-entry.component';
-import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
+import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
 
 @Component({
   selector: 'app-experience-section',
   standalone: true,
-  imports: [TimelineEntryComponent, TechDecorComponent],
+  imports: [TimelineEntryComponent, SectionHeadingComponent],
   template: `
-    <section
-      id="experience"
-      aria-label="My Journey"
-      role="region"
-      class="relative py-20 lg:py-28 bg-(--color-surface) overflow-hidden"
-    >
-      <app-tech-decor [seed]="3" />
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-2 text-center">My Journey</h2>
-        <p class="text-center text-(--color-text-muted) mb-10 lg:mb-14 text-sm">Projects & milestones that shaped my skills</p>
-        <div>
+    <section id="experience" aria-labelledby="experience-title" class="border-b border-(--color-border) py-20 lg:py-24">
+      <div class="container-page">
+        <app-section-heading headingId="experience-title" command="git log --experience" title="Experience" />
+        <ol class="max-w-5xl">
           @for (entry of entries; track entry.company) {
-            <app-timeline-entry [entry]="entry" />
+            <li><app-timeline-entry [entry]="entry" /></li>
           }
-        </div>
+        </ol>
       </div>
     </section>
   `,

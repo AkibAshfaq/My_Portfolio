@@ -1,177 +1,175 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { BackLinkComponent } from '../../shared/components/back-link/back-link.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PROJECTS_DATA } from '../../core/models/portfolio.data';
-import type { Project } from '../../core/models/portfolio.models';
+import type { Project, ProjectType } from '../../core/models/portfolio.models';
+import { PROJECT_TYPE_LABEL } from '../../shared/components/project-card/project-card.component';
 
-const TYPE_META: Record<
-  string,
-  { label: string; icon: string; runNote: string; runHow: string }
-> = {
-  web:         { label: 'Web App',               icon: '🌐', runNote: '', runHow: '' },
-  mobile:      { label: 'Android App',           icon: '📱', runNote: 'This is an Android application and cannot run in the browser.', runHow: 'Clone the repo and open it in Android Studio to build and run on an emulator or device.' },
-  desktop:     { label: 'Desktop App',           icon: '🖥️', runNote: 'This is a Windows desktop application and cannot run in the browser.', runHow: 'Clone the repo and open it in Visual Studio to build and run on Windows.' },
-  backend:     { label: 'Backend / Server',      icon: '⚙️', runNote: 'This is a server-side application — there is no visual browser interface.', runHow: 'Clone the repo and follow the README for build and run instructions.' },
-  competitive: { label: 'Competitive Programming', icon: '🏆', runNote: 'These are standalone C++ solutions — not a runnable app.', runHow: 'Each file is a self-contained Codeforces solution. Compile any file with a C++ compiler to run it.' },
+const RUN_STEPS: Record<ProjectType, { note: string; steps: string[] }> = {
+  web: {
+    note: 'Web application — follow the README for environment setup.',
+    steps: ['# see README.md for install & run'],
+  },
+  mobile: {
+    note: 'Android application — it cannot run in the browser.',
+    steps: ['# open the folder in Android Studio', '# then Run ▶ on an emulator or device'],
+  },
+  desktop: {
+    note: 'Windows desktop application — it cannot run in the browser.',
+    steps: ['# open the .sln in Visual Studio', '# then Start (F5) on Windows'],
+  },
+  backend: {
+    note: 'Server-side application — no visual browser interface.',
+    steps: ['# see README.md for build & run'],
+  },
+  game: {
+    note: 'Browser game — playable on the games page.',
+    steps: ['# see README.md'],
+  },
+  iot: {
+    note: 'Embedded project — runs on a microcontroller, not in the browser.',
+    steps: ['# open the sketch in the Arduino IDE', '# select the board and port, then Upload'],
+  },
+  competitive: {
+    note: 'Standalone C++ solutions — each file compiles on its own.',
+    steps: ['g++ -O2 -o solution solution.cpp && ./solution'],
+  },
 };
 
 @Component({
   selector: 'app-project-detail-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [BackLinkComponent],
   template: `
-    @if (project) {
-      <main role="main" class="min-h-screen bg-(--color-bg) py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-5xl mx-auto">
+    <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
+      <div class="container-page py-12 lg:py-16">
+        <app-back-link class="mb-10 inline-block" fallback="/#projects" />
 
-          <a
-            routerLink="/"
-            class="inline-flex items-center gap-2 text-(--color-primary) hover:underline mb-8 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) rounded"
-          >
-            ← Back to Portfolio
-          </a>
+        @if (project; as p) {
+          <p class="mb-2 font-mono text-sm text-(--color-text-muted)" aria-hidden="true">
+            <span class="text-(--color-primary)">akib&#64;portfolio</span>:<span class="text-(--color-info)">~/projects/{{ p.slug }}</span>$
+            <span class="text-(--color-text)">cat README.md</span>
+          </p>
+          <h1 class="text-3xl font-semibold text-(--color-text) sm:text-4xl">{{ p.name }}</h1>
+          <p class="mt-3 flex flex-wrap items-center gap-2 font-mono text-sm">
+            <span class="text-(--color-info)">{{ p.role }}</span>
+            <span class="chip">{{ typeLabel }}</span>
+          </p>
+          <p class="mt-5 max-w-4xl text-lg leading-relaxed text-(--color-text-muted)">{{ p.description }}</p>
 
-          <div class="mb-8">
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-              <span class="inline-block rounded-full bg-(--color-primary) text-white text-xs font-semibold px-4 py-1">
-                {{ project.role }}
-              </span>
-              <span class="inline-flex items-center gap-1.5 rounded-full border border-(--color-border) bg-(--color-surface) text-xs font-medium px-3 py-1 text-(--color-text-muted)">
-                <span aria-hidden="true">{{ meta.icon }}</span> {{ meta.label }}
-              </span>
-            </div>
-            <h1 class="text-4xl font-extrabold text-(--color-text) mb-4">{{ project.name }}</h1>
-            <p class="text-lg text-(--color-text-muted) leading-relaxed">{{ project.description }}</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            @if (p.repoUrl) {
+              <a [href]="p.repoUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary">source on github ↗</a>
+            }
+            @if (p.demoUrl) {
+              <a [href]="p.demoUrl" target="_blank" rel="noopener noreferrer" class="btn">live demo ↗</a>
+            }
           </div>
 
-          @if (project.projectType === 'web' && project.demoUrl) {
-            <div class="mb-10">
-              <div class="flex items-center justify-between mb-3">
-                <h2 class="text-xl font-bold text-(--color-text)">Live Demo</h2>
-                <a
-                  [href]="project.demoUrl"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-sm text-(--color-primary) hover:underline"
-                >Open in new tab ↗</a>
+          @if (p.projectType === 'web' && safeDemoUrl) {
+            <div class="term-window mt-10">
+              <div class="term-titlebar justify-between">
+                <span class="flex items-center gap-3">
+                  <span class="term-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                  {{ p.demoUrl }}
+                </span>
               </div>
-              <div class="rounded-xl border border-(--color-border) overflow-hidden shadow-sm" style="height: 480px">
-                <iframe
-                  [src]="safeDemoUrl"
-                  [title]="project.name + ' live demo'"
-                  class="w-full h-full"
-                  loading="lazy"
-                  sandbox="allow-scripts allow-same-origin allow-forms"
-                ></iframe>
-              </div>
-            </div>
-          } @else if (project.projectType !== 'web' || !project.demoUrl) {
-            <div class="mb-10 rounded-xl border border-(--color-border) bg-(--color-surface) p-6">
-              <div class="flex items-start gap-4">
-                <span class="text-3xl mt-0.5" aria-hidden="true">{{ meta.icon }}</span>
-                <div>
-                  <h2 class="text-base font-bold text-(--color-text) mb-1">{{ meta.label }}</h2>
-                  @if (meta.runNote) {
-                    <p class="text-sm text-(--color-text-muted) mb-2">{{ meta.runNote }}</p>
-                    <p class="text-sm text-(--color-text)">{{ meta.runHow }}</p>
-                  } @else {
-                    <p class="text-sm text-(--color-text-muted)">No live demo is hosted for this project yet.</p>
-                  }
-                  @if (project.repoUrl) {
-                    <a
-                      [href]="project.repoUrl"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="inline-flex items-center mt-4 text-sm text-(--color-primary) font-semibold hover:underline"
-                    >View source on GitHub →</a>
-                  }
-                </div>
-              </div>
+              <iframe [src]="safeDemoUrl" [title]="p.name + ' live demo'" class="h-[28rem] w-full bg-white"
+                      loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
             </div>
           }
 
-          <div class="grid md:grid-cols-2 gap-8 lg:gap-12 mb-10">
-            <div>
-              <h2 class="text-xl font-bold text-(--color-text) mb-3">Architecture</h2>
-              <p class="text-(--color-text-muted) leading-relaxed text-sm">{{ project.architecture }}</p>
-            </div>
-            <div>
-              <h2 class="text-xl font-bold text-(--color-text) mb-3">Technologies</h2>
-              <ul role="list" class="flex flex-wrap gap-2">
-                @for (tech of project.technologies; track tech) {
-                  <li>
-                    <span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">
-                      {{ tech }}
-                    </span>
-                  </li>
+          <div class="mt-12 grid gap-10 md:grid-cols-2 xl:gap-16">
+            @if (p.architecture) {
+              <section aria-labelledby="arch-title">
+                <h2 id="arch-title" class="mb-3 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Architecture</h2>
+                <p class="leading-relaxed text-(--color-text-muted)">{{ p.architecture }}</p>
+              </section>
+            }
+            <section aria-labelledby="tech-title">
+              <h2 id="tech-title" class="mb-3 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Technologies</h2>
+              <ul class="flex flex-wrap gap-1.5">
+                @for (tech of p.technologies; track tech) {
+                  <li class="chip">{{ tech }}</li>
                 }
               </ul>
-            </div>
+            </section>
           </div>
 
-          <div class="mb-10">
-            <h2 class="text-xl font-bold text-(--color-text) mb-4">Key Features</h2>
-            <ul class="space-y-2">
-              @for (feature of project.features; track feature) {
-                <li class="flex items-start gap-3 text-(--color-text) text-sm leading-relaxed">
-                  <span class="mt-1.5 w-1.5 h-1.5 rounded-full bg-(--color-primary) shrink-0" aria-hidden="true"></span>
-                  {{ feature }}
-                </li>
+          @if (p.features?.length) {
+          <section class="mt-12" aria-labelledby="feat-title">
+            <h2 id="feat-title" class="mb-4 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Key features</h2>
+            <ul class="space-y-2 text-[0.9375rem] leading-relaxed text-(--color-text)">
+              @for (feature of p.features; track feature) {
+                <li class="flex gap-3"><span class="font-mono text-(--color-primary)" aria-hidden="true">✓</span><span>{{ feature }}</span></li>
               }
             </ul>
-          </div>
+          </section>
+          }
 
-          <div class="flex flex-wrap gap-4">
-            @if (project.repoUrl) {
-              <a
-                [href]="project.repoUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center rounded-xl border border-(--color-border) bg-(--color-surface) px-6 py-3 text-sm font-semibold text-(--color-text) transition-colors hover:bg-(--color-bg) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-              >
-                View Source Code →
-              </a>
-            }
-            @if (project.demoUrl) {
-              <a
-                [href]="project.demoUrl"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center rounded-xl bg-(--color-primary) px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-              >
-                Live Demo →
-              </a>
-            }
-          </div>
-
-        </div>
-      </main>
-    } @else {
-      <main role="main" class="min-h-screen bg-(--color-bg) flex items-center justify-center">
-        <div class="text-center">
-          <h1 class="text-2xl font-bold text-(--color-text) mb-4">Project not found</h1>
-          <a routerLink="/" class="text-(--color-primary) hover:underline">← Back to Portfolio</a>
-        </div>
-      </main>
-    }
+          @if (p.repoUrl) {
+            <section class="mt-12" aria-labelledby="run-title">
+              <h2 id="run-title" class="mb-2 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Run it locally</h2>
+              <p class="mb-4 text-(--color-text-muted)">{{ run.note }}</p>
+              <div class="term-window">
+                <div class="term-titlebar justify-between">
+                  <span>bash</span>
+                  <button type="button" class="btn btn-sm min-h-7 px-2" (click)="copySetup()"
+                          [attr.aria-label]="copied() ? 'Commands copied' : 'Copy setup commands'">
+                    {{ copied() ? 'copied ✓' : 'copy' }}
+                  </button>
+                </div>
+                <pre class="overflow-x-auto p-4 text-[0.8125rem] leading-6"><code>@for (line of setupLines; track $index) {<span [class]="line.startsWith('#') ? 'text-(--color-text-muted)' : 'text-(--color-text)'">@if (!line.startsWith('#')) {<span class="text-(--color-primary) select-none">$ </span>}{{ line }}</span>
+}</code></pre>
+              </div>
+            </section>
+          }
+        } @else {
+          <h1 class="font-mono text-xl text-(--color-error)">cat: README.md: No such project</h1>
+          <p class="mt-3 text-(--color-text-muted)">The project you're looking for doesn't exist. Head back to the project list.</p>
+        }
+      </div>
+    </main>
   `,
 })
 export class ProjectDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private sanitizer = inject(DomSanitizer);
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   project: Project | null = null;
-  meta = TYPE_META['web'];
+  typeLabel = '';
+  run = RUN_STEPS.web;
+  setupLines: string[] = [];
   safeDemoUrl: SafeResourceUrl | null = null;
+  readonly copied = signal(false);
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug');
     this.project = PROJECTS_DATA.find(p => p.slug === slug) ?? null;
-    if (this.project) {
-      this.meta = TYPE_META[this.project.projectType] ?? TYPE_META['web'];
-      if (this.project.demoUrl) {
-        this.safeDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.demoUrl);
-      }
+    if (!this.project) return;
+
+    this.typeLabel = PROJECT_TYPE_LABEL[this.project.projectType];
+    this.run = RUN_STEPS[this.project.projectType];
+    if (this.project.repoUrl) {
+      const dir = this.project.repoUrl.split('/').pop()!;
+      this.setupLines = [`git clone ${this.project.repoUrl}.git`, `cd ${dir}`, ...this.run.steps];
+    }
+    if (this.project.demoUrl) {
+      this.safeDemoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.project.demoUrl);
+    }
+  }
+
+  async copySetup(): Promise<void> {
+    if (!this.isBrowser) return;
+    try {
+      await navigator.clipboard.writeText(this.setupLines.filter(l => !l.startsWith('#')).join('\n'));
+      this.copied.set(true);
+      setTimeout(() => this.copied.set(false), 2000);
+    } catch {
+      // clipboard blocked — the commands remain selectable on the page
     }
   }
 }

@@ -128,11 +128,11 @@ interface Enemy { x:number; y:number; w:number; h:number; vx:number; vy:number; 
       <!-- Mobile controls -->
       <div class="flex items-center gap-4 md:hidden">
         <button (pointerdown)="keys.left=true"  (pointerup)="keys.left=false"  (pointercancel)="keys.left=false"
-          class="w-14 h-14 rounded-xl bg-(--color-surface) border border-(--color-border) text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-white transition-colors">◀</button>
+          class="w-14 h-14 rounded-xl bg-(--color-surface) border border-(--color-border) text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-(--color-on-primary) transition-colors">◀</button>
         <button (pointerdown)="keys.jump=true"  (pointerup)="keys.jump=false"  (pointercancel)="keys.jump=false"
           class="w-16 h-16 rounded-full bg-yellow-400 border-2 border-yellow-600 text-2xl font-bold text-black active:bg-yellow-300 transition-colors">▲</button>
         <button (pointerdown)="keys.right=true" (pointerup)="keys.right=false" (pointercancel)="keys.right=false"
-          class="w-14 h-14 rounded-xl bg-(--color-surface) border border-(--color-border) text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-white transition-colors">▶</button>
+          class="w-14 h-14 rounded-xl bg-(--color-surface) border border-(--color-border) text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-(--color-on-primary) transition-colors">▶</button>
       </div>
 
       <p class="text-xs text-(--color-text-muted) hidden md:block">Arrow keys / WASD · Space or Up to jump</p>
