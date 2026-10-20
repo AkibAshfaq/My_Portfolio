@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, PLATFORM_ID, afterNextRender, inject, viewChildren } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import { BackLinkComponent } from '../../shared/components/back-link/back-link.component';
-import { SnakeGameComponent } from './snake-game/snake-game.component';
-import { MarioGameComponent } from './mario-game/mario-game.component';
-import { CarGameComponent } from './car-game/car-game.component';
+import { TextGameComponent } from '../../shared/components/text-game/text-game.component';
+import { GAMES } from '../../core/games/games.registry';
 
 @Component({
   selector: 'app-games-page',
   standalone: true,
-  imports: [BackLinkComponent, SnakeGameComponent, MarioGameComponent, CarGameComponent],
+  imports: [BackLinkComponent, TextGameComponent],
   template: `
     <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
       <div class="container-page py-12 lg:py-16">
@@ -18,14 +20,15 @@ import { CarGameComponent } from './car-game/car-game.component';
           <span class="text-(--color-text)">ls</span>
         </p>
         <h1 class="text-3xl font-semibold text-(--color-text) sm:text-4xl">Games</h1>
-        <p class="mt-3 max-w-2xl text-(--color-text-muted)">
-          Mini games built from scratch with HTML Canvas and TypeScript — a side project for learning
-          rendering loops, collision detection and input handling.
+        <p class="mt-3 max-w-3xl text-(--color-text-muted)">
+          Text-mode games that run like terminal programs — every frame is drawn with characters.
+          Click a screen (or press Enter) to start; the game only listens to the keyboard while it's focused.
+          You can also launch one from the terminal with <code class="text-(--color-primary)">play snake</code>.
         </p>
 
-        <div class="mt-10 space-y-8">
+        <div class="mt-10 grid gap-6 2xl:grid-cols-2">
           @for (game of games; track game.id) {
-            <section class="term-window" [attr.aria-labelledby]="game.id">
+            <section class="term-window" [id]="game.id" [attr.aria-labelledby]="game.id + '-title'">
               <div class="term-titlebar justify-between">
                 <span class="flex items-center gap-3">
                   <span class="term-dots" aria-hidden="true"><span></span><span></span><span></span></span>
@@ -33,14 +36,18 @@ import { CarGameComponent } from './car-game/car-game.component';
                 </span>
                 <span class="hidden sm:inline">{{ game.tags }}</span>
               </div>
-              <div class="p-4 sm:p-6">
-                <h2 [id]="game.id" class="text-lg font-semibold text-(--color-text)">{{ game.title }}</h2>
-                <p class="mb-5 mt-1 text-[0.9375rem] text-(--color-text-muted)">{{ game.description }}</p>
-                @switch (game.id) {
-                  @case ('snake') { <app-snake-game /> }
-                  @case ('mario') { <app-mario-game /> }
-                  @case ('road') { <app-car-game /> }
-                }
+              <div class="p-4 sm:p-5">
+                <h2 [id]="game.id + '-title'" class="text-lg font-semibold text-(--color-text)">{{ game.title }}</h2>
+                <p class="mb-4 mt-1 text-[0.9375rem] text-(--color-text-muted)">{{ game.description }}</p>
+                <app-text-game
+                  [create]="game.create"
+                  [name]="game.title"
+                  [bin]="game.bin"
+                  [hint]="game.hint"
+                  [tones]="game.tones"
+                  [controls]="game.controls"
+                  [storageKey]="game.storageKey"
+                />
               </div>
             </section>
           }
@@ -50,27 +57,25 @@ import { CarGameComponent } from './car-game/car-game.component';
   `,
 })
 export class GamesPageComponent {
-  readonly games = [
-    {
-      id: 'snake',
-      bin: 'snake',
-      title: 'Snake',
-      tags: 'TypeScript · Canvas',
-      description: 'Classic snake — keyboard and mobile swipe controls.',
-    },
-    {
-      id: 'mario',
-      bin: 'mario-run',
-      title: 'Mario Run',
-      tags: 'TypeScript · Canvas · Physics',
-      description: 'Side-scrolling platformer — run, jump, stomp enemies and collect coins.',
-    },
-    {
-      id: 'road',
-      bin: 'road-rush',
-      title: 'Road Rush',
-      tags: 'TypeScript · Canvas · Physics',
-      description: 'Top-down car dodger — survive traffic, rack up distance, beat your best.',
-    },
-  ];
+  readonly games = GAMES;
+  private readonly players = viewChildren(TextGameComponent);
+  private readonly route = inject(ActivatedRoute);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    // `play <game>` links here with ?play=<id>#<id>: the router scrolls to the anchor, we focus the game.
+    afterNextRender(() => {
+      this.route.queryParamMap
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(params => this.focusGame(params.get('play')));
+    });
+  }
+
+  private focusGame(id: string | null): void {
+    if (!this.isBrowser || !id) return;
+    const index = GAMES.findIndex(g => g.id === id);
+    if (index === -1) return;
+    this.players()[index]?.focus();
+  }
 }

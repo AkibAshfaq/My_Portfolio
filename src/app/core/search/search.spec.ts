@@ -19,7 +19,7 @@ describe('search', () => {
 
   it('links projects without a detail page to where they live', () => {
     const snake = search('snake').find(r => r.title === 'Snake');
-    expect(snake?.target).toEqual({ kind: 'route', path: '/games' });
+    expect(snake?.target).toEqual({ kind: 'route', path: '/games?play=snake#snake' });
     const cf = search('codeforces').find(r => r.title === 'Codeforces');
     expect(cf?.target.kind).toBe('url');
   });

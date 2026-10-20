@@ -49,8 +49,8 @@ export const PROJECT_TYPE_LABEL: Record<ProjectType, string> = {
             <a [routerLink]="['/projects', project().slug]" class="btn btn-sm btn-primary"
                [attr.aria-label]="'Details for ' + project().name">details</a>
           }
-          @if (project().playRoute) {
-            <a [routerLink]="project().playRoute" class="btn btn-sm btn-primary"
+          @if (project().playId) {
+            <a routerLink="/games" [queryParams]="{ play: project().playId }" [fragment]="project().playId" class="btn btn-sm btn-primary"
                [attr.aria-label]="'Play ' + project().name">play</a>
           }
           @if (project().profileUrl) {
