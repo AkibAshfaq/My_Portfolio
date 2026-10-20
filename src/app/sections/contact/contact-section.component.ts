@@ -16,7 +16,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
     <section id="contact" aria-labelledby="contact-title" class="py-20 lg:py-24">
       <div class="container-page">
         <app-section-heading headingId="contact-title" command="contact --compose" title="Contact"
-          subtitle="Open to internships, entry-level roles and collaborative projects. I reply within 24 hours." />
+          subtitle="Happy to talk about .NET, software architecture or collaboration. I reply within 24 hours." />
 
         <div class="grid gap-6 lg:grid-cols-[20rem_1fr]">
           <div class="term-window self-start">
@@ -37,8 +37,8 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
                 <dd class="mt-1 text-(--color-text)">{{ location }}</dd>
               </div>
               <div class="px-4 py-3">
-                <dt class="label">looking for</dt>
-                <dd class="mt-1 text-(--color-text)">Internship / entry-level</dd>
+                <dt class="label">currently</dt>
+                <dd class="mt-1 text-(--color-text)">{{ title }} &#64; {{ company }}</dd>
               </div>
               <div class="px-4 py-3">
                 <dt class="label">links</dt>
@@ -106,6 +106,8 @@ export class ContactSectionComponent {
   readonly github = GITHUB_URL;
   readonly linkedin = LINKEDIN_URL;
   readonly location = HERO_DATA.location;
+  readonly title = HERO_DATA.title;
+  readonly company = HERO_DATA.company;
   readonly resumeUrl = HERO_DATA.resumeUrl;
 
   readonly name = signal('');

@@ -9,7 +9,7 @@ export interface HeroData {
   title: string;
   tagline: string;
   resumeUrl: string | null;
-  openToWork: boolean;
+  company: string;
   location: string;
 }
 
@@ -25,8 +25,6 @@ export interface GitHubStats {
 }
 
 export interface AboutData {
-  photoUrl: string;
-  photoAlt: string;
   biography: string; // max 300 words
 }
 

@@ -11,7 +11,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
   template: `
     <section id="experience" aria-labelledby="experience-title" class="border-b border-(--color-border) py-20 lg:py-24">
       <div class="container-page">
-        <app-section-heading headingId="experience-title" command="git log --journey" title="Journey" subtitle="Projects and milestones that shaped my skills, most recent first." />
+        <app-section-heading headingId="experience-title" command="git log --experience" title="Experience" />
         <ol class="max-w-3xl">
           @for (entry of entries; track entry.company) {
             <li><app-timeline-entry [entry]="entry" /></li>

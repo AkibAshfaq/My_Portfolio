@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ScrollService } from '../../core/services/scroll.service';
 import { GitHubService } from '../../core/services/github.service';
-import { HERO_DATA, PROJECTS_DATA } from '../../core/models/portfolio.data';
+import { HERO_DATA } from '../../core/models/portfolio.data';
 import { TerminalComponent } from '../../shared/components/terminal/terminal.component';
 
 @Component({
@@ -17,17 +17,15 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
         <div>
           <p class="mb-6 font-mono text-sm text-(--color-text-muted)">~/akib-ashfaq/README.md</p>
 
-          @if (hero.openToWork) {
-            <p class="mb-5 inline-flex items-center gap-2.5 rounded border border-(--color-border) bg-(--color-surface) px-3 py-1.5 font-mono text-xs text-(--color-text)">
-              <span class="status-dot" aria-hidden="true"></span>
-              Open to internships &amp; entry-level roles
-            </p>
-          }
+          <p class="mb-5 inline-flex items-center gap-2.5 rounded border border-(--color-border) bg-(--color-surface) px-3 py-1.5 font-mono text-xs text-(--color-text)">
+            <span class="status-dot" aria-hidden="true"></span>
+            {{ hero.title }} &#64; {{ hero.company }}
+          </p>
 
           <h1 id="hero-title" class="text-4xl font-semibold text-(--color-text) sm:text-5xl lg:text-6xl">
             {{ hero.name }}<span class="cursor-blink ml-2" aria-hidden="true"></span>
           </h1>
-          <p class="mt-4 font-mono text-lg text-(--color-primary) sm:text-xl">{{ hero.title }} — Backend &amp; Full-Stack</p>
+          <p class="mt-4 font-mono text-lg text-(--color-primary) sm:text-xl">{{ hero.title }} — .NET &amp; Backend</p>
           <p class="mt-4 max-w-xl text-lg leading-relaxed text-(--color-text-muted)">{{ hero.tagline }}</p>
 
           <div class="mt-8 flex flex-wrap gap-3">
@@ -72,9 +70,9 @@ export class HeroSectionComponent {
   private readonly gh = toSignal(inject(GitHubService).stats$);
 
   readonly facts = () => [
+    { label: 'Company', value: HERO_DATA.company },
+    { label: 'Stack', value: '.NET · C#' },
     { label: 'Location', value: 'Dhaka, BD' },
-    { label: 'Education', value: 'AIUB' },
-    { label: 'Projects', value: `${PROJECTS_DATA.length}+ built` },
     { label: 'GitHub', value: `${this.gh()?.publicRepos ?? '—'} repos` },
   ];
 }

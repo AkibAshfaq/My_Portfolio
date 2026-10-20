@@ -109,7 +109,7 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   readonly SECTION_LINKS: { id: SectionId; label: string }[] = [
     { id: 'about', label: 'about' },
     { id: 'skills', label: 'skills' },
-    { id: 'experience', label: 'journey' },
+    { id: 'experience', label: 'experience' },
     { id: 'projects', label: 'projects' },
     { id: 'contact', label: 'contact' },
   ];
