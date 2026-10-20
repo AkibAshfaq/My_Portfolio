@@ -7,8 +7,6 @@
 export interface CvEducation {
   institution: string;
   degree: string;
-  period: string;
-  details: { label: string; value: string }[];
 }
 
 export interface CvProject {
@@ -36,20 +34,7 @@ export const CV_WEBSITE = 'https://www.akibashfaq.com';
 export const CV_EDUCATION: CvEducation[] = [
   {
     institution: 'American International University-Bangladesh (AIUB)',
-    degree: 'Bachelor of Computer Science and Engineering',
-    period: 'Expected January 2027',
-    details: [
-      { label: 'CGPA', value: '3.82 out of 4.00' },
-      {
-        label: 'Concentration',
-        value: 'Software Technologies — backend focus: database design and web API development',
-      },
-      {
-        label: 'Related courses',
-        value:
-          'Object Oriented Programming with C#, Advanced Programming in .NET, Advanced Database Management System, Web Technologies, Mobile Application Development',
-      },
-    ],
+    degree: 'Bachelor of Science in Computer Science and Engineering',
   },
 ];
 

@@ -24,7 +24,7 @@ export const ABOUT_DATA: AboutData = {
 
 I focus on architecture that stays maintainable as systems and teams grow. I apply modular monolith principles to keep clear module boundaries within a single deployable, and Domain-Driven Design to model complex business domains through bounded contexts, aggregates and a shared ubiquitous language.
 
-My core stack is C# and ASP.NET Core, with MongoDB and SQL Server for persistence and Redis for caching, delivered through a disciplined Git Flow release process. I am completing a BSc in Computer Science and Engineering at AIUB (CGPA 3.82/4.00) and continue to sharpen my problem-solving through competitive programming.`
+My core stack is C# and ASP.NET Core, with MongoDB and SQL Server for persistence and Redis for caching, delivered through a disciplined Git Flow release process. I studied Computer Science and Engineering at American International University-Bangladesh (AIUB), and I continue to sharpen my problem-solving through competitive programming.`
 };
 
 export const SKILLS_DATA: SkillCategory[] = [

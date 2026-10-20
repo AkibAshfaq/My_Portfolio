@@ -25,7 +25,8 @@ describe('search', () => {
   });
 
   it('indexes CV education', () => {
-    expect(search('cgpa')[0].group).toBe('CV');
+    expect(search('american international')[0].group).toBe('CV');
+    expect(search('cgpa')).toEqual([]);
   });
 
   it('does not list a skill twice', () => {

@@ -72,9 +72,9 @@ function buildIndex(): SearchItem[] {
   for (const edu of CV_EDUCATION) {
     items.push({
       title: edu.institution,
-      subtitle: `${edu.degree} · ${edu.period}`,
+      subtitle: edu.degree,
       group: 'CV',
-      keywords: `education university degree ${edu.details.map(d => `${d.label} ${d.value}`).join(' ')}`,
+      keywords: 'education university degree studied aiub computer science',
       target: route('/cv'),
     });
   }
