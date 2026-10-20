@@ -1,191 +1,106 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
+import { CODEFORCES_URL, LEETCODE_URL } from '../../core/terminal/shell';
+import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
 
-interface IotProject {
+interface Item {
   name: string;
   description: string;
-  url: string;
+  url?: string;
+  route?: string;
+  action: string;
+}
+
+interface Group {
+  title: string;
+  path: string;
+  summary: string;
+  tags: string[];
+  items: Item[];
 }
 
 @Component({
   selector: 'app-extracurricular-section',
   standalone: true,
-  imports: [RouterLink, TechDecorComponent],
+  imports: [RouterLink, SectionHeadingComponent],
   template: `
-    <section
-      aria-label="Extra-Curricular Activities"
-      role="region"
-      class="relative py-16 lg:py-28 bg-(--color-bg) overflow-hidden"
-    >
-      <app-tech-decor [seed]="2" />
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-2 text-center">Beyond the Code</h2>
-        <p class="text-center text-(--color-text-muted) mb-10 lg:mb-14 text-sm">
-          Things I build and do outside of assignments and work
-        </p>
+    <section aria-labelledby="beyond-title" class="border-b border-(--color-border) py-20 lg:py-24">
+      <div class="container-page">
+        <app-section-heading headingId="beyond-title" command="ls ~/side-projects" title="Beyond the code"
+          subtitle="Things I build and practise outside of coursework." />
 
-        <!-- Single column on mobile → 3 columns on desktop -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-
-          <!-- Game Development -->
-          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-3">
-              <span class="text-3xl shrink-0" aria-hidden="true">🎮</span>
-              <div class="min-w-0">
-                <h3 class="text-lg font-bold text-(--color-text)">Game Development</h3>
-                <p class="text-xs text-(--color-text-muted) font-medium uppercase tracking-wide">Extra-Curricular</p>
+        <div class="grid gap-4 lg:grid-cols-3">
+          @for (group of groups; track group.title) {
+            <article class="term-window flex flex-col">
+              <div class="term-titlebar">{{ group.path }}</div>
+              <div class="flex flex-1 flex-col gap-4 p-5">
+                <h3 class="text-lg font-semibold text-(--color-text)">{{ group.title }}</h3>
+                <p class="text-[0.9375rem] leading-relaxed text-(--color-text-muted)">{{ group.summary }}</p>
+                <ul class="flex flex-wrap gap-1.5" aria-label="Technologies">
+                  @for (tag of group.tags; track tag) {
+                    <li class="chip">{{ tag }}</li>
+                  }
+                </ul>
+                <ul class="mt-auto divide-y divide-(--color-border) rounded border border-(--color-border)">
+                  @for (item of group.items; track item.name) {
+                    <li class="flex items-center justify-between gap-3 px-3 py-2.5">
+                      <div class="min-w-0">
+                        <p class="truncate font-mono text-sm text-(--color-text)">{{ item.name }}</p>
+                        <p class="truncate text-xs text-(--color-text-muted)">{{ item.description }}</p>
+                      </div>
+                      @if (item.route) {
+                        <a [routerLink]="item.route" class="btn btn-sm shrink-0" [attr.aria-label]="item.action + ' ' + item.name">{{ item.action }}</a>
+                      } @else {
+                        <a [href]="item.url" target="_blank" rel="noopener noreferrer" class="btn btn-sm shrink-0"
+                           [attr.aria-label]="item.action + ' ' + item.name">{{ item.action }} ↗</a>
+                      }
+                    </li>
+                  }
+                </ul>
               </div>
-            </div>
-            <p class="text-sm text-(--color-text-muted) leading-relaxed">
-              I build mini games from scratch to explore canvas rendering, game physics, and interactive
-              programming — no game engines, just TypeScript and HTML Canvas.
-            </p>
-            <ul class="flex flex-wrap gap-2">
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">TypeScript</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">HTML Canvas</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Game Physics</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Angular</span></li>
-            </ul>
-
-            <!-- Game list -->
-            <div class="flex flex-col gap-2.5">
-              @for (game of games; track game.label) {
-                <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                  <div class="min-w-0">
-                    <p class="text-sm font-semibold text-(--color-text)">{{ game.emoji }} {{ game.label }}</p>
-                    <p class="text-xs text-(--color-text-muted) truncate">{{ game.description }}</p>
-                  </div>
-                  <a
-                    routerLink="/games"
-                    [attr.aria-label]="'Play ' + game.label"
-                    class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                  >Play →</a>
-                </div>
-              }
-            </div>
-          </div>
-
-          <!-- Competitive Programming -->
-          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-3">
-              <span class="text-3xl shrink-0" aria-hidden="true">🏆</span>
-              <div class="min-w-0">
-                <h3 class="text-lg font-bold text-(--color-text)">Competitive Programming</h3>
-                <p class="text-xs text-(--color-text-muted) font-medium uppercase tracking-wide">Extra-Curricular</p>
-              </div>
-            </div>
-            <p class="text-sm text-(--color-text-muted) leading-relaxed">
-              I actively solve algorithmic problems on Codeforces and LeetCode, tracking my
-              Codeforces progress in a public GitHub repository. Topics include sorting, binary
-              search, dynamic programming, and graph algorithms.
-            </p>
-            <ul class="flex flex-wrap gap-2">
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">C++</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Algorithms</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Codeforces</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">LeetCode</span></li>
-            </ul>
-
-            <!-- Platform list -->
-            <div class="flex flex-col gap-2.5">
-              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                <div class="min-w-0">
-                  <p class="text-sm font-semibold text-(--color-text)">⚔️ Codeforces</p>
-                  <p class="text-xs text-(--color-text-muted) truncate">Rated contests & algorithmic problems</p>
-                </div>
-                <a
-                  href="https://codeforces.com/profile/AkibAshfaq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Visit Codeforces profile"
-                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                >Visit →</a>
-              </div>
-              <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                <div class="min-w-0">
-                  <p class="text-sm font-semibold text-(--color-text)">🧩 LeetCode</p>
-                  <p class="text-xs text-(--color-text-muted) truncate">DSA practice & interview prep</p>
-                </div>
-                <a
-                  href="https://leetcode.com/u/AkibAshfaq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Visit LeetCode profile"
-                  class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                >Visit →</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- IoT & Hardware -->
-          <div class="flex flex-col gap-4 rounded-xl border border-(--color-border) bg-(--color-surface) p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-3">
-              <span class="text-3xl shrink-0" aria-hidden="true">⚡</span>
-              <div class="min-w-0">
-                <h3 class="text-lg font-bold text-(--color-text)">IoT &amp; Hardware</h3>
-                <p class="text-xs text-(--color-text-muted) font-medium uppercase tracking-wide">Extra-Curricular</p>
-              </div>
-            </div>
-            <p class="text-sm text-(--color-text-muted) leading-relaxed">
-              I experiment with embedded systems and IoT hardware — building real-world projects
-              using ESP32 and Arduino. From Wi-Fi connected boards to smart agricultural sensors
-              and interactive hardware interfaces.
-            </p>
-            <ul class="flex flex-wrap gap-2">
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">C++</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">ESP32</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Arduino</span></li>
-              <li><span class="inline-flex items-center rounded-full border border-(--color-border) bg-(--color-bg) px-3 py-1 text-xs font-medium text-(--color-text)">Embedded C</span></li>
-            </ul>
-
-            <!-- IoT project list -->
-            <div class="flex flex-col gap-2.5">
-              @for (project of iotProjects; track project.name) {
-                <div class="flex items-center justify-between gap-3 rounded-lg border border-(--color-border) bg-(--color-bg) px-4 py-3">
-                  <div class="min-w-0">
-                    <p class="text-sm font-semibold text-(--color-text) truncate">{{ project.name }}</p>
-                    <p class="text-xs text-(--color-text-muted) truncate">{{ project.description }}</p>
-                  </div>
-                  <a
-                    [href]="project.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    [attr.aria-label]="'View ' + project.name + ' on GitHub'"
-                    class="shrink-0 inline-flex items-center rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-xs font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                  >GitHub →</a>
-                </div>
-              }
-            </div>
-          </div>
-
+            </article>
+          }
         </div>
       </div>
     </section>
   `,
 })
 export class ExtracurricularSectionComponent {
-  readonly games = [
-    { emoji: '🐍', label: 'Snake',     description: 'Classic snake — eat, grow, don\'t crash' },
-    { emoji: '🍄', label: 'Mario Run', description: 'Platformer — jump, stomp, collect coins'  },
-    { emoji: '🚗', label: 'Road Rush', description: 'Top-down car dodger — survive traffic'     },
-  ];
-
-  readonly iotProjects: IotProject[] = [
+  readonly groups: Group[] = [
     {
-      name: 'ESP32 WiFi Board',
-      description: 'Wi-Fi connected IoT board — remote control & sensor experiments',
-      url: 'https://github.com/AkibAshfaq/Esp32-WIFI-Board',
+      title: 'Game development',
+      path: '~/side-projects/games',
+      summary:
+        'Mini games built from scratch to explore canvas rendering, game physics and input handling — no engines, just TypeScript and HTML Canvas.',
+      tags: ['TypeScript', 'HTML Canvas', 'Game physics', 'Angular'],
+      items: [
+        { name: 'snake', description: "Classic snake — eat, grow, don't crash", route: '/games', action: 'play' },
+        { name: 'mario-run', description: 'Platformer — jump, stomp, collect coins', route: '/games', action: 'play' },
+        { name: 'road-rush', description: 'Top-down car dodger — survive traffic', route: '/games', action: 'play' },
+      ],
     },
     {
-      name: 'Smart Agricultural Automation',
-      description: 'Automated soil, temperature & humidity monitoring system',
-      url: 'https://github.com/AkibAshfaq/SMART-AGRICULTURAL-AUTOMATION-SYSTEM',
+      title: 'Competitive programming',
+      path: '~/side-projects/cp',
+      summary:
+        'Regular practice on Codeforces and LeetCode in C++: sorting, binary search, dynamic programming and graph algorithms.',
+      tags: ['C++', 'Algorithms', 'Data structures'],
+      items: [
+        { name: 'codeforces', description: 'Rated contests and problem sets', url: CODEFORCES_URL, action: 'visit' },
+        { name: 'leetcode', description: 'DSA practice and interview prep', url: LEETCODE_URL, action: 'visit' },
+      ],
     },
     {
-      name: 'TUI Table Tennis Paddle',
-      description: 'Smart paddle with embedded sensors & terminal UI interface',
-      url: 'https://github.com/AkibAshfaq/TUI-Based-Table-Tennis-Paddle',
+      title: 'IoT & hardware',
+      path: '~/side-projects/iot',
+      summary:
+        'Embedded projects with ESP32 and Arduino — Wi-Fi boards, agricultural sensors and interactive hardware interfaces.',
+      tags: ['C++', 'ESP32', 'Arduino', 'Embedded C'],
+      items: [
+        { name: 'esp32-wifi-board', description: 'Remote control and sensor experiments', url: 'https://github.com/AkibAshfaq/Esp32-WIFI-Board', action: 'repo' },
+        { name: 'smart-agri-automation', description: 'Soil, temperature and humidity monitoring', url: 'https://github.com/AkibAshfaq/SMART-AGRICULTURAL-AUTOMATION-SYSTEM', action: 'repo' },
+        { name: 'tui-tt-paddle', description: 'Sensor paddle with a terminal UI', url: 'https://github.com/AkibAshfaq/TUI-Based-Table-Tennis-Paddle', action: 'repo' },
+      ],
     },
   ];
 }

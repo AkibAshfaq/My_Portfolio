@@ -2,46 +2,39 @@ import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Theme } from '../models/portfolio.models';
 
+/**
+ * Dark is the default theme (set statically on <html> in index.html).
+ * A saved "light" preference is applied by an inline script before first paint;
+ * this service mirrors that state and persists changes.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
   private readonly platformId = inject(PLATFORM_ID);
 
-  theme = signal<Theme>('light');
+  theme = signal<Theme>('dark');
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      const stored = localStorage.getItem('theme');
-      let initial: Theme;
-
-      if (stored === 'light' || stored === 'dark') {
-        initial = stored;
-      } else {
-        initial = window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light';
-      }
-
-      this.theme.set(initial);
-
-      if (initial === 'dark') {
-        document.documentElement.classList.add('dark');
-      }
+      this.theme.set(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
     }
   }
 
   toggle(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const next: Theme = this.theme() === 'light' ? 'dark' : 'light';
-      this.theme.set(next);
-      localStorage.setItem('theme', next);
+    this.set(this.theme() === 'light' ? 'dark' : 'light');
+  }
 
-      if (next === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+  set(next: Theme): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
+    this.theme.set(next);
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // storage unavailable — theme still applies for this visit
+    }
+    document.documentElement.classList.toggle('dark', next === 'dark');
   }
 }

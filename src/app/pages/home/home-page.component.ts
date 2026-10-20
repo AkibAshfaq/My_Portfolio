@@ -22,7 +22,7 @@ import { ContactSectionComponent } from '../../sections/contact/contact-section.
     ContactSectionComponent,
   ],
   template: `
-    <main role="main">
+    <main id="main" tabindex="-1" class="outline-none">
       <app-hero-section />
       <app-about-section />
       <app-skills-section />

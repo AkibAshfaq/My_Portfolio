@@ -1,37 +1,34 @@
 import { Component, signal, computed } from '@angular/core';
 import { PROJECTS_DATA } from '../../core/models/portfolio.data';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
-import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
+import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
 
-const INITIAL_COUNT = 3;
+const INITIAL_COUNT = 4;
 
 @Component({
   selector: 'app-projects-section',
   standalone: true,
-  imports: [ProjectCardComponent, TechDecorComponent],
+  imports: [ProjectCardComponent, SectionHeadingComponent],
   template: `
-    <section id="projects" aria-label="Projects" role="region" class="relative py-20 lg:py-28 bg-(--color-bg) overflow-hidden">
-      <app-tech-decor [seed]="0" />
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-10 lg:mb-14 text-center">Projects</h2>
+    <section id="projects" aria-labelledby="projects-title" class="border-b border-(--color-border) bg-(--color-surface-2)/40 py-20 lg:py-24">
+      <div class="container-page">
+        <app-section-heading headingId="projects-title" command="ls -l ~/projects" title="Projects"
+          subtitle="Selected work across web, mobile, desktop and backend. Open any project for architecture notes and setup steps." />
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 lg:gap-8">
-          @for (project of visibleProjects(); track project.name) {
-            <app-project-card [project]="project" />
+        <ul class="grid gap-4 md:grid-cols-2">
+          @for (project of visibleProjects(); track project.slug) {
+            <li><app-project-card [project]="project" /></li>
           }
-        </div>
+        </ul>
 
         @if (projects.length > initialCount) {
-          <div class="mt-10 text-center">
-            <button
-              type="button"
-              (click)="toggleExpand()"
-              class="inline-flex items-center gap-2 rounded-xl border border-(--color-border) bg-(--color-surface) px-6 py-3 text-sm font-semibold text-(--color-text) shadow-sm transition-colors hover:bg-(--color-bg) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-            >
+          <div class="mt-8">
+            <button type="button" (click)="expanded.update(v => !v)" class="btn" [attr.aria-expanded]="expanded()">
               @if (expanded()) {
-                Show Less
+                <span class="text-(--color-text-muted)">$</span> ls ~/projects | head -{{ initialCount }}
               } @else {
-                Show More ({{ projects.length - initialCount }} more)
+                <span class="text-(--color-text-muted)">$</span> ls ~/projects --all
+                <span class="text-(--color-text-muted)">(+{{ projects.length - initialCount }})</span>
               }
             </button>
           </div>
@@ -48,8 +45,4 @@ export class ProjectsSectionComponent {
   readonly visibleProjects = computed(() =>
     this.expanded() ? this.projects : this.projects.slice(0, INITIAL_COUNT)
   );
-
-  toggleExpand(): void {
-    this.expanded.update(v => !v);
-  }
 }

@@ -54,7 +54,7 @@ const CANVAS_SIZE = CELL * COLS;
               <button
                 type="button"
                 (click)="startGame()"
-                class="mt-2 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                class="mt-2 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-(--color-on-primary) transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 Start Game
               </button>
@@ -69,7 +69,7 @@ const CANVAS_SIZE = CELL * COLS;
               <button
                 type="button"
                 (click)="startGame()"
-                class="mt-2 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                class="mt-2 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-(--color-on-primary) transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 Play Again
               </button>
