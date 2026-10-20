@@ -12,114 +12,59 @@ export const HERO_DATA: HeroData = {
   name: 'Akib Ashfaq',
   title: 'Software Engineer',
   tagline:
-    'Passionate about building software and solving real-world problems.',
+    'I build and maintain large-scale .NET systems, with a focus on clean architecture, performance and maintainable domain models.',
   resumeUrl: '/AkibAshfaq_CV.pdf',
-  openToWork: true,
+  company: 'Bdjobs Ltd',
   location: 'Dhaka, Bangladesh',
 };
 
 export const ABOUT_DATA: AboutData = {
-  photoUrl: '/images/akib-ashfaq.jpeg',
-  photoAlt: 'Profile photo of Akib Ashfaq',
-  biography: `I'm a software developer based in Dhaka, Bangladesh, studying at AIUB (American International University Bangladesh). I work primarily in backend development building APIs, server-side logic, and system architecture.
+  biography: `I'm a Software Engineer at Bdjobs Ltd in Dhaka, Bangladesh, where I work on a large-scale, high-traffic platform built on .NET. My day-to-day work is backend engineering: designing APIs, server-side logic and data access that hold up under real production load.
 
-My project journey spans competitive programming in C++, backend web development with PHP and JavaScript, mobile development with Kotlin, and desktop apps with C# WinForms. I'm always learning exploring new languages, frameworks, and problem-solving techniques.
+I care about architecture that stays maintainable as a system grows. I work with modular monolith design, keeping clear module boundaries inside a single deployable, and with Domain-Driven Design to model the business with bounded contexts, aggregates and a shared ubiquitous language.
 
-I believe great software is built by people who understand both the code and the systems it runs on. When I'm not coding, I'm solving algorithmic challenges on Codeforces or experimenting with IoT hardware like the ESP32.`
+My toolbox centres on C# and .NET, with MongoDB and SQL Server for persistence, Redis for caching, and a Git Flow branching workflow for disciplined releases. Outside work I study at AIUB, solve algorithmic problems on Codeforces and experiment with IoT hardware like the ESP32.`
 };
 
 export const SKILLS_DATA: SkillCategory[] = [
   {
+    name: '.NET & C#',
+    skills: ['C#', '.NET', 'ASP.NET Core', 'Web API', 'Entity Framework Core', 'LINQ', 'WinForms'],
+  },
+  {
+    name: 'Architecture & Design',
+    skills: ['Modular Monolith', 'Domain-Driven Design', 'Bounded Contexts', 'Clean Architecture', 'REST APIs', 'Large-scale systems'],
+  },
+  {
+    name: 'Databases & Caching',
+    skills: ['MongoDB', 'Redis', 'SQL Server', 'MySQL'],
+  },
+  {
     name: 'Programming Languages',
-    skills: ['JavaScript', 'TypeScript', 'C#', 'Java', 'Kotlin', 'PHP', 'C++'],
+    skills: ['C#', 'TypeScript', 'JavaScript', 'Java', 'Kotlin', 'PHP', 'C++'],
   },
   {
     name: 'Web & Frontend',
-    skills: ['HTML5', 'CSS3', 'Angular', 'Tailwind CSS', 'Bootstrap'],
+    skills: ['Angular', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap'],
   },
   {
-    name: 'Mobile & Desktop',
-    skills: ['Android (Kotlin)', 'WinForms (.NET)', 'Jetpack Navigation', 'Material Design'],
-  },
-  {
-    name: 'Backend & Databases',
-    skills: ['PHP', 'Java', 'ASP.NET', 'MySQL', 'SQL Server', 'REST APIs'],
-  },
-  {
-    name: 'Tools & Others',
-    skills: ['Git', 'GitHub', 'Android Studio', 'Visual Studio', 'VS Code', 'Arduino / ESP32'],
+    name: 'Tools & Workflow',
+    skills: ['Git', 'Git Flow', 'GitHub', 'Google Cloud Console', 'Visual Studio', 'VS Code'],
   },
 ];
 
 export const EXPERIENCE_DATA: WorkEntry[] = [
   {
-    company: 'Angular Portfolio — My Portfolio',
-    jobTitle: 'Full-Stack Developer (Angular / TypeScript)',
-    startDate: '2026-05',
+    company: 'Bdjobs Ltd',
+    jobTitle: 'Software Engineer',
+    startDate: '2026-08',
     endDate: null,
     responsibilities: [
-      'Built a personal portfolio with Angular 21, SSR, and Tailwind CSS.',
-      'Implemented dark/light theme switching, smooth scrolling, and responsive design.',
-      'Set up server-side rendering with Angular Universal and Express.',
-      'Wrote accessible, WCAG-compliant markup with semantic HTML.',
-    ],
-  },
-  {
-    company: 'Academic Project — AIUB App',
-    jobTitle: 'Android Developer (Kotlin)',
-    startDate: '2025-12',
-    endDate: null,
-    responsibilities: [
-      'Developed an Android application for AIUB university portal management in Kotlin.',
-      'Implemented multiple screens using Android Navigation Component.',
-      'Applied Material Design 3 components for a modern, consistent UI.',
-      'Integrated API calls for live university data.',
-    ],
-  },
-  {
-    company: 'Personal Project — E-Commerce Management Portal',
-    jobTitle: 'Web Developer (PHP / MySQL)',
-    startDate: '2025-09',
-    endDate: '2025-11',
-    responsibilities: [
-      'Built a full-featured web-based e-commerce management and accountant portal using PHP.',
-      'Implemented product inventory management, sales tracking, and financial reporting.',
-      'Designed a MySQL database schema for products, orders, and transactions.',
-      'Created a responsive admin dashboard with JavaScript and Bootstrap.',
-    ],
-  },
-  {
-    company: 'Personal Project — Java Streaming Platform',
-    jobTitle: 'Backend Developer (Java)',
-    startDate: '2025-08',
-    endDate: '2025-09',
-    responsibilities: [
-      'Developed a media streaming backend platform in Java.',
-      'Implemented content management and streaming logic.',
-      'Applied object-oriented design principles and Java best practices.',
-    ],
-  },
-  {
-    company: 'Academic Project — DeskShop',
-    jobTitle: 'Desktop Developer (C# / .NET)',
-    startDate: '2025-01',
-    endDate: '2025-10',
-    responsibilities: [
-      'Built DeskShop, a Windows desktop e-commerce application as a university C# course project.',
-      'Implemented product catalog, shopping cart, checkout, and order history with WinForms.',
-      'Designed a relational SQL Server database for products, users, and orders.',
-      'Applied LINQ, delegates, and event-driven programming throughout.',
-    ],
-  },
-  {
-    company: 'Self-Learning — Competitive Programming',
-    jobTitle: 'Competitive Programmer (C++)',
-    startDate: '2024-12',
-    endDate: null,
-    responsibilities: [
-      'Actively solving algorithmic problems on Codeforces using C++.',
-      'Topics include: sorting, binary search, dynamic programming, and graph algorithms.',
-      'Building problem-solving skills and algorithmic thinking progressively.',
+      'Develop and maintain features on a large-scale, high-traffic .NET platform.',
+      'Build backend services and APIs in C# / ASP.NET Core following a modular monolith architecture.',
+      'Apply Domain-Driven Design to model business logic with bounded contexts and aggregates.',
+      'Work with MongoDB for persistence and Redis for caching to keep responses fast under load.',
+      'Ship through a Git Flow branching and release workflow, and manage services in Google Cloud Console.',
     ],
   },
 ];
@@ -290,10 +235,10 @@ export const CONTACT_DATA: ContactData = {
 export const HOME_SEO: SeoConfig = {
   title: 'Akib Ashfaq',
   description:
-    'Personal portfolio of Akib Ashfaq, a software developer from Dhaka, Bangladesh specialising in Angular, C#, Kotlin, and PHP.',
-  ogTitle: 'Akib Ashfaq — Full-Stack & Android Developer',
+    'Akib Ashfaq — Software Engineer at Bdjobs Ltd, Dhaka. .NET, modular monolith and Domain-Driven Design, MongoDB, Redis, large-scale systems.',
+  ogTitle: 'Akib Ashfaq — Software Engineer (.NET)',
   ogDescription:
-    'Explore the projects, skills, and journey of Akib Ashfaq, a full-stack and Android developer.',
+    'Software Engineer at Bdjobs Ltd building large-scale .NET systems with modular monolith architecture and Domain-Driven Design.',
   ogImage: 'https://avatars.githubusercontent.com/u/183318977?v=4',
   ogUrl: 'https://akibashfaq.dev',
 };

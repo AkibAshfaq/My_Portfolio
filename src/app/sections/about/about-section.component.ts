@@ -14,22 +14,8 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
       <div class="container-page">
         <app-section-heading headingId="about-title" command="cat about.md" title="About" />
 
-        <div class="grid gap-10 lg:grid-cols-[17rem_1fr] lg:gap-14">
-          <figure class="term-window self-start">
-            <div class="term-titlebar">akib-ashfaq.jpeg</div>
-            <img
-              [src]="about.photoUrl"
-              [alt]="about.photoAlt"
-              (error)="onImgError($event)"
-              loading="lazy"
-              width="272"
-              height="272"
-              class="aspect-square w-full object-cover"
-            />
-          </figure>
-
-          <div class="grid gap-10 xl:grid-cols-[1fr_19rem]">
-            <div class="space-y-4 text-[1.0625rem] leading-relaxed text-(--color-text)">
+        <div class="grid gap-10 lg:grid-cols-[1fr_21rem] lg:gap-14">
+            <div class="max-w-3xl space-y-4 text-[1.0625rem] leading-relaxed text-(--color-text)">
               @for (para of paragraphs; track $index) {
                 <p>{{ para }}</p>
               }
@@ -52,28 +38,23 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
                 }
               </dl>
             </div>
-          </div>
         </div>
       </div>
     </section>
   `,
 })
 export class AboutSectionComponent {
-  readonly about = ABOUT_DATA;
   readonly paragraphs = ABOUT_DATA.biography.split('\n\n');
   private readonly gh = toSignal(inject(GitHubService).stats$);
 
   readonly profile = () => [
-    { key: 'university', value: 'AIUB', tone: 'text-(--color-text)' },
+    { key: 'role', value: HERO_DATA.title, tone: 'text-(--color-text)' },
+    { key: 'company', value: HERO_DATA.company, tone: 'text-(--color-primary)' },
     { key: 'location', value: HERO_DATA.location, tone: 'text-(--color-text)' },
-    { key: 'focus', value: 'Backend · APIs', tone: 'text-(--color-text)' },
-    { key: 'status', value: 'open to work', tone: 'text-(--color-primary)' },
+    { key: 'stack', value: '.NET · MongoDB · Redis', tone: 'text-(--color-text)' },
+    { key: 'architecture', value: 'Modular monolith · DDD', tone: 'text-(--color-text)' },
     { key: 'github', value: 'AkibAshfaq', href: GITHUB_URL, tone: '' },
     { key: 'public_repos', value: `${this.gh()?.publicRepos ?? '—'}`, tone: 'text-(--color-warn)' },
     { key: 'member_since', value: this.gh()?.memberSince ?? '—', tone: 'text-(--color-text)' },
   ];
-
-  onImgError(event: Event): void {
-    (event.target as HTMLImageElement).src = 'https://avatars.githubusercontent.com/u/183318977?v=4';
-  }
 }

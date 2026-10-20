@@ -129,14 +129,9 @@ export const COMMANDS: Record<string, CommandDef> = {
     run: () =>
       out(
         { text: HERO_DATA.name, tone: 'accent' },
-        `${HERO_DATA.title} · ${HERO_DATA.location}`,
+        `${HERO_DATA.title} @ ${HERO_DATA.company} · ${HERO_DATA.location}`,
         HERO_DATA.tagline,
-        {
-          text: HERO_DATA.openToWork
-            ? 'status: open to internships and entry-level roles'
-            : 'status: not currently looking',
-          tone: 'info',
-        },
+        { text: 'stack: .NET · C# · MongoDB · Redis · modular monolith · DDD', tone: 'info' },
       ),
   },
   about: {
@@ -160,7 +155,7 @@ export const COMMANDS: Record<string, CommandDef> = {
   },
   experience: {
     usage: 'experience',
-    summary: 'Projects and milestones timeline',
+    summary: 'Work experience',
     run: () =>
       out(
         ...sortExperienceEntries(EXPERIENCE_DATA).map(e => ({
