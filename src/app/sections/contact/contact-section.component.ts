@@ -18,7 +18,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
         <app-section-heading headingId="contact-title" command="contact --compose" title="Contact"
           subtitle="Happy to talk about .NET, software architecture or collaboration. I reply within 24 hours." />
 
-        <div class="grid gap-6 lg:grid-cols-[20rem_1fr]">
+        <div class="grid gap-6 lg:grid-cols-[22rem_1fr] xl:grid-cols-[26rem_1fr] xl:gap-8">
           <div class="term-window self-start">
             <div class="term-titlebar">contact.yml</div>
             <dl class="divide-y divide-(--color-border) font-mono text-sm">

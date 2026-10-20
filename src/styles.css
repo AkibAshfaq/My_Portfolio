@@ -43,6 +43,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Scale the whole UI up on large and high-resolution displays */
+  @media (min-width: 1600px) { html { font-size: 17px; } }
+  @media (min-width: 2200px) { html { font-size: 18px; } }
+  @media (min-width: 2800px) { html { font-size: 20px; } }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
@@ -86,13 +91,12 @@
 }
 
 @layer components {
+  /* Fluid page width: fills the screen with gutters that grow with the viewport */
   .container-page {
     margin-inline: auto;
-    max-width: 72rem;
-    padding-inline: 1rem;
-  }
-  @media (min-width: 640px) {
-    .container-page { padding-inline: 1.5rem; }
+    width: 100%;
+    max-width: 120rem;
+    padding-inline: clamp(1rem, 4vw, 6rem);
   }
 
   /* ── Terminal window frame ─────────────────────────────── */

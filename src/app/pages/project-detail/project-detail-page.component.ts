@@ -35,7 +35,7 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
   imports: [RouterLink],
   template: `
     <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
-      <div class="container-page max-w-5xl py-12 lg:py-16">
+      <div class="container-page py-12 lg:py-16">
         <a routerLink="/" fragment="projects" class="btn btn-sm mb-10">
           <span class="text-(--color-text-muted)">$</span> cd ..
         </a>
@@ -50,7 +50,7 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
             <span class="text-(--color-info)">{{ p.role }}</span>
             <span class="chip">{{ typeLabel }}</span>
           </p>
-          <p class="mt-5 max-w-3xl text-lg leading-relaxed text-(--color-text-muted)">{{ p.description }}</p>
+          <p class="mt-5 max-w-4xl text-lg leading-relaxed text-(--color-text-muted)">{{ p.description }}</p>
 
           <div class="mt-6 flex flex-wrap gap-2">
             @if (p.repoUrl) {
@@ -74,7 +74,7 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
             </div>
           }
 
-          <div class="mt-12 grid gap-10 md:grid-cols-2">
+          <div class="mt-12 grid gap-10 md:grid-cols-2 xl:gap-16">
             <section aria-labelledby="arch-title">
               <h2 id="arch-title" class="mb-3 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Architecture</h2>
               <p class="leading-relaxed text-(--color-text-muted)">{{ p.architecture }}</p>

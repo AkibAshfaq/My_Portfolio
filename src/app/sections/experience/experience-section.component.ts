@@ -12,7 +12,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
     <section id="experience" aria-labelledby="experience-title" class="border-b border-(--color-border) py-20 lg:py-24">
       <div class="container-page">
         <app-section-heading headingId="experience-title" command="git log --experience" title="Experience" />
-        <ol class="max-w-3xl">
+        <ol class="max-w-5xl">
           @for (entry of entries; track entry.company) {
             <li><app-timeline-entry [entry]="entry" /></li>
           }

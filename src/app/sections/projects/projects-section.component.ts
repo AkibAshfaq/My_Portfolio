@@ -3,7 +3,7 @@ import { PROJECTS_DATA } from '../../core/models/portfolio.data';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
 import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
 
-const INITIAL_COUNT = 4;
+const INITIAL_COUNT = 6;
 
 @Component({
   selector: 'app-projects-section',
@@ -15,7 +15,7 @@ const INITIAL_COUNT = 4;
         <app-section-heading headingId="projects-title" command="ls -l ~/projects" title="Projects"
           subtitle="Selected work across web, mobile, desktop and backend. Open any project for architecture notes and setup steps." />
 
-        <ul class="grid gap-4 md:grid-cols-2">
+        <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-5">
           @for (project of visibleProjects(); track project.slug) {
             <li><app-project-card [project]="project" /></li>
           }
