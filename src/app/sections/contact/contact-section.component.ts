@@ -1,5 +1,6 @@
 import { Component, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { HERO_DATA } from '../../core/models/portfolio.data';
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../core/terminal/shell';
 import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
@@ -11,7 +12,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
 @Component({
   selector: 'app-contact-section',
   standalone: true,
-  imports: [SectionHeadingComponent],
+  imports: [SectionHeadingComponent, RouterLink],
   template: `
     <section id="contact" aria-labelledby="contact-title" class="py-20 lg:py-24">
       <div class="container-page">
@@ -45,9 +46,7 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
                 <dd class="mt-1 flex gap-4">
                   <a [href]="github" target="_blank" rel="noopener noreferrer" class="link">github</a>
                   <a [href]="linkedin" target="_blank" rel="noopener noreferrer" class="link">linkedin</a>
-                  @if (resumeUrl) {
-                    <a [href]="resumeUrl" target="_blank" rel="noopener noreferrer" class="link">cv.pdf</a>
-                  }
+                  <a routerLink="/cv" class="link">cv</a>
                 </dd>
               </div>
             </dl>
@@ -108,7 +107,6 @@ export class ContactSectionComponent {
   readonly location = HERO_DATA.location;
   readonly title = HERO_DATA.title;
   readonly company = HERO_DATA.company;
-  readonly resumeUrl = HERO_DATA.resumeUrl;
 
   readonly name = signal('');
   readonly subject = signal('');

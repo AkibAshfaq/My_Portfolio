@@ -8,6 +8,8 @@ import {
 } from '../models/portfolio.data';
 import type { GitHubStats, SectionId, Theme } from '../models/portfolio.models';
 import { formatEndDate, sortExperienceEntries } from '../utils/experience.utils';
+import { hasDetailPage } from '../utils/project.utils';
+import { search, type SearchTarget } from '../search/search';
 
 /** One rendered line of terminal output. */
 export interface ShellLine {
@@ -49,7 +51,6 @@ const SECTIONS: Record<string, SectionId> = {
   '~': 'hero',
   home: 'hero',
   hero: 'hero',
-  about: 'about',
   skills: 'skills',
   experience: 'experience',
   journey: 'experience',
@@ -102,12 +103,38 @@ function openTarget(target: string, ctx: ShellContext): ShellResult {
   }
   const project = findProject(t);
   if (project) {
-    ctx.navigate(`/projects/${project.slug}`);
-    ctx.close();
-    return out({ text: `Opening ~/projects/${project.slug} …`, tone: 'muted' });
+    if (hasDetailPage(project)) {
+      return goTo({ kind: 'route', path: `/projects/${project.slug}` }, ctx);
+    }
+    if (project.playRoute) {
+      return goTo({ kind: 'route', path: project.playRoute }, ctx);
+    }
+    const link = project.profileUrl ?? project.repoUrl ?? project.demoUrl;
+    if (link) {
+      return goTo({ kind: 'url', url: link }, ctx);
+    }
   }
   return err(`open: no such target '${target}'. Try 'projects' or 'open github'.`);
 }
+
+/** Performs a navigation described by a search target. */
+function goTo(target: SearchTarget, ctx: ShellContext): ShellResult {
+  switch (target.kind) {
+    case 'section':
+      ctx.scrollTo(target.id);
+      return { lines: [] };
+    case 'route':
+      ctx.navigate(target.path);
+      ctx.close();
+      return out({ text: `Opening ${target.path} …`, tone: 'muted' });
+    case 'url':
+      ctx.openUrl(target.url);
+      return out({ text: `Opening ${target.url} …`, tone: 'muted' });
+  }
+}
+
+/** Last results of the `search` command, so `search <n>` can open one. */
+let lastResults: ReturnType<typeof search> = [];
 
 export const COMMANDS: Record<string, CommandDef> = {
   help: {
@@ -137,8 +164,7 @@ export const COMMANDS: Record<string, CommandDef> = {
   about: {
     usage: 'about',
     summary: 'Short biography',
-    run: (_args, ctx) => {
-      ctx.scrollTo('about');
+    run: () => {
       return out(...ABOUT_DATA.biography.split('\n\n').flatMap((p, i) => (i ? ['', p] : [p])));
     },
   },
@@ -203,23 +229,52 @@ export const COMMANDS: Record<string, CommandDef> = {
     summary: 'List sections and files',
     run: () =>
       out(
-        ...['about/', 'skills/', 'experience/', 'projects/', 'contact/', 'games/'].map(d => ({
+        ...['skills/', 'experience/', 'projects/', 'contact/', 'games/'].map(d => ({
           text: d,
           tone: 'info' as const,
           run: `cd ${d}`,
         })),
-        { text: 'cv.pdf', run: 'cv' },
+        { text: 'cv/', tone: 'info' as const, run: 'cv' },
+        { text: 'cv.pdf', run: 'cv --download' },
       ),
   },
   cv: {
-    usage: 'cv',
-    summary: 'Download my CV (PDF)',
-    run: (_args, ctx) => {
-      if (!HERO_DATA.resumeUrl) {
-        return err('cv: not available right now');
+    usage: 'cv [--download]',
+    summary: 'View my CV, or download the PDF',
+    run: (args, ctx) => {
+      if (args[0] === '--download' || args[0] === '-d') {
+        if (!HERO_DATA.resumeUrl) {
+          return err('cv: PDF not available right now');
+        }
+        ctx.openUrl(HERO_DATA.resumeUrl);
+        return out({ text: 'Downloading AkibAshfaq_CV.pdf …', tone: 'muted' });
       }
-      ctx.openUrl(HERO_DATA.resumeUrl);
-      return out({ text: 'Opening AkibAshfaq_CV.pdf …', tone: 'muted' });
+      return goTo({ kind: 'route', path: '/cv' }, ctx);
+    },
+  },
+  search: {
+    usage: 'search <query>',
+    summary: 'Search the whole site',
+    run: (args, ctx) => {
+      const n = Number(args[0]);
+      if (args.length === 1 && Number.isInteger(n) && n >= 1 && n <= lastResults.length) {
+        return goTo(lastResults[n - 1].target, ctx);
+      }
+      if (!args.length) {
+        return err('usage: search <query>   e.g. search redis');
+      }
+      lastResults = search(args.join(' '), 10);
+      if (!lastResults.length) {
+        return out({ text: `no results for '${args.join(' ')}'`, tone: 'muted' });
+      }
+      return out(
+        ...lastResults.map((r, i) => ({
+          text: `  ${i + 1}. ${pad(r.title, 28)} ${r.group.toLowerCase()}`,
+          run: `search ${i + 1}`,
+        })),
+        { text: '' },
+        { text: "Click a result or run 'search <number>'.", tone: 'muted' },
+      );
     },
   },
   contact: {

@@ -3,10 +3,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PROJECTS_DATA } from '../../core/models/portfolio.data';
-import type { Project } from '../../core/models/portfolio.models';
+import type { Project, ProjectType } from '../../core/models/portfolio.models';
 import { PROJECT_TYPE_LABEL } from '../../shared/components/project-card/project-card.component';
 
-const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] }> = {
+const RUN_STEPS: Record<ProjectType, { note: string; steps: string[] }> = {
   web: {
     note: 'Web application — follow the README for environment setup.',
     steps: ['# see README.md for install & run'],
@@ -22,6 +22,14 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
   backend: {
     note: 'Server-side application — no visual browser interface.',
     steps: ['# see README.md for build & run'],
+  },
+  game: {
+    note: 'Browser game — playable on the games page.',
+    steps: ['# see README.md'],
+  },
+  iot: {
+    note: 'Embedded project — runs on a microcontroller, not in the browser.',
+    steps: ['# open the sketch in the Arduino IDE', '# select the board and port, then Upload'],
   },
   competitive: {
     note: 'Standalone C++ solutions — each file compiles on its own.',
@@ -75,10 +83,12 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
           }
 
           <div class="mt-12 grid gap-10 md:grid-cols-2 xl:gap-16">
-            <section aria-labelledby="arch-title">
-              <h2 id="arch-title" class="mb-3 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Architecture</h2>
-              <p class="leading-relaxed text-(--color-text-muted)">{{ p.architecture }}</p>
-            </section>
+            @if (p.architecture) {
+              <section aria-labelledby="arch-title">
+                <h2 id="arch-title" class="mb-3 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Architecture</h2>
+                <p class="leading-relaxed text-(--color-text-muted)">{{ p.architecture }}</p>
+              </section>
+            }
             <section aria-labelledby="tech-title">
               <h2 id="tech-title" class="mb-3 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Technologies</h2>
               <ul class="flex flex-wrap gap-1.5">
@@ -89,6 +99,7 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
             </section>
           </div>
 
+          @if (p.features?.length) {
           <section class="mt-12" aria-labelledby="feat-title">
             <h2 id="feat-title" class="mb-4 text-lg font-semibold text-(--color-text)"><span class="text-(--color-text-muted)">## </span>Key features</h2>
             <ul class="space-y-2 text-[0.9375rem] leading-relaxed text-(--color-text)">
@@ -97,6 +108,7 @@ const RUN_STEPS: Record<Project['projectType'], { note: string; steps: string[] 
               }
             </ul>
           </section>
+          }
 
           @if (p.repoUrl) {
             <section class="mt-12" aria-labelledby="run-title">

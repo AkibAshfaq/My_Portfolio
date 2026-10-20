@@ -1,12 +1,15 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Project } from '../../../core/models/portfolio.models';
+import { Project, ProjectType } from '../../../core/models/portfolio.models';
+import { hasDetailPage } from '../../../core/utils/project.utils';
 
-export const PROJECT_TYPE_LABEL: Record<Project['projectType'], string> = {
+export const PROJECT_TYPE_LABEL: Record<ProjectType, string> = {
   web: 'web',
+  backend: 'backend',
   mobile: 'android',
   desktop: 'desktop',
-  backend: 'backend',
+  game: 'game',
+  iot: 'iot',
   competitive: 'cp',
 };
 
@@ -24,7 +27,11 @@ export const PROJECT_TYPE_LABEL: Record<Project['projectType'], string> = {
       <div class="flex flex-1 flex-col gap-4 p-5">
         <div>
           <h3 class="text-lg font-semibold text-(--color-text)">
-            <a [routerLink]="['/projects', project().slug]" class="hover:text-(--color-primary)">{{ project().name }}</a>
+            @if (hasDetail()) {
+              <a [routerLink]="['/projects', project().slug]" class="hover:text-(--color-primary)">{{ project().name }}</a>
+            } @else {
+              {{ project().name }}
+            }
           </h3>
           <p class="mt-0.5 font-mono text-xs text-(--color-info)">{{ project().role }}</p>
         </div>
@@ -38,8 +45,18 @@ export const PROJECT_TYPE_LABEL: Record<Project['projectType'], string> = {
         </ul>
 
         <div class="flex flex-wrap gap-2 border-t border-(--color-border) pt-4">
-          <a [routerLink]="['/projects', project().slug]" class="btn btn-sm btn-primary"
-             [attr.aria-label]="'Details for ' + project().name">details</a>
+          @if (hasDetail()) {
+            <a [routerLink]="['/projects', project().slug]" class="btn btn-sm btn-primary"
+               [attr.aria-label]="'Details for ' + project().name">details</a>
+          }
+          @if (project().playRoute) {
+            <a [routerLink]="project().playRoute" class="btn btn-sm btn-primary"
+               [attr.aria-label]="'Play ' + project().name">play</a>
+          }
+          @if (project().profileUrl) {
+            <a [href]="project().profileUrl" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary"
+               [attr.aria-label]="project().name + ' profile'">profile ↗</a>
+          }
           @if (project().demoUrl) {
             <a [href]="project().demoUrl" target="_blank" rel="noopener noreferrer" class="btn btn-sm"
                [attr.aria-label]="'Live demo of ' + project().name">demo ↗</a>
@@ -57,4 +74,5 @@ export class ProjectCardComponent {
   project = input.required<Project>();
 
   typeLabel = () => PROJECT_TYPE_LABEL[this.project().projectType];
+  hasDetail = () => hasDetailPage(this.project());
 }
