@@ -1,139 +1,147 @@
-import { Component } from '@angular/core';
-import { CONTACT_DATA } from '../../core/models/portfolio.data';
-import type { SocialLink } from '../../core/models/portfolio.models';
-import { TechDecorComponent } from '../../shared/components/tech-decor/tech-decor.component';
+import { Component, PLATFORM_ID, inject, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { HERO_DATA } from '../../core/models/portfolio.data';
+import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../core/terminal/shell';
+import { SectionHeadingComponent } from '../../shared/components/section-heading/section-heading.component';
 
-const EMAIL = 'akibash.dev@gmail.com';
-
+/**
+ * Contact details plus a terminal-style mail composer. Nothing is sent from the
+ * site itself: the composer hands the message to the visitor's mail app or Gmail.
+ */
 @Component({
   selector: 'app-contact-section',
   standalone: true,
-  imports: [TechDecorComponent],
+  imports: [SectionHeadingComponent],
   template: `
-    <section
-      id="contact"
-      aria-label="Contact"
-      role="region"
-      class="relative py-20 lg:py-28 bg-(--color-surface) overflow-hidden"
-    >
-      <app-tech-decor [seed]="1" />
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl lg:text-4xl font-bold text-(--color-text) mb-2 text-center">Get In Touch</h2>
-        <p class="text-center text-(--color-text-muted) mb-10 lg:mb-14 text-sm">
-          Open to internships, entry-level roles, and collaborative projects
-        </p>
+    <section id="contact" aria-labelledby="contact-title" class="py-20 lg:py-24">
+      <div class="container-page">
+        <app-section-heading headingId="contact-title" command="contact --compose" title="Contact"
+          subtitle="Open to internships, entry-level roles and collaborative projects. I reply within 24 hours." />
 
-        <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-
-          <!-- Left — Availability -->
-          <div class="rounded-xl border border-(--color-border) bg-(--color-bg) p-5 flex flex-col gap-4">
-            <h3 class="text-sm font-bold text-(--color-text) uppercase tracking-wider">Availability</h3>
-
-            <div class="flex items-center gap-2">
-              <span class="h-2.5 w-2.5 rounded-full bg-green-500 shrink-0 animate-pulse" aria-hidden="true"></span>
-              <p class="text-sm font-semibold text-green-600 dark:text-green-400">Available now</p>
-            </div>
-
-            <div class="space-y-3 text-sm">
-              <div>
-                <p class="text-(--color-text-muted) text-xs uppercase tracking-wide mb-0.5">Looking for</p>
-                <p class="text-(--color-text) font-medium">Internship / Entry-level</p>
+        <div class="grid gap-6 lg:grid-cols-[20rem_1fr]">
+          <div class="term-window self-start">
+            <div class="term-titlebar">contact.yml</div>
+            <dl class="divide-y divide-(--color-border) font-mono text-sm">
+              <div class="px-4 py-3">
+                <dt class="label">email</dt>
+                <dd class="mt-1 flex items-center justify-between gap-2">
+                  <a [href]="'mailto:' + email" class="link break-all">{{ email }}</a>
+                  <button type="button" class="btn btn-sm min-h-7 shrink-0 px-2" (click)="copyEmail()"
+                          [attr.aria-label]="copied() ? 'Email copied' : 'Copy email address'">
+                    {{ copied() ? 'copied' : 'copy' }}
+                  </button>
+                </dd>
               </div>
-              <div>
-                <p class="text-(--color-text-muted) text-xs uppercase tracking-wide mb-0.5">Location</p>
-                <p class="text-(--color-text) font-medium">Dhaka, Bangladesh</p>
+              <div class="px-4 py-3">
+                <dt class="label">location</dt>
+                <dd class="mt-1 text-(--color-text)">{{ location }}</dd>
               </div>
-              <div>
-                <p class="text-(--color-text-muted) text-xs uppercase tracking-wide mb-0.5">Response time</p>
-                <p class="text-(--color-text) font-medium">Within 24 hours</p>
+              <div class="px-4 py-3">
+                <dt class="label">looking for</dt>
+                <dd class="mt-1 text-(--color-text)">Internship / entry-level</dd>
               </div>
-              <div>
-                <p class="text-(--color-text-muted) text-xs uppercase tracking-wide mb-0.5">Email</p>
-                <a
-                  [href]="mailtoLink"
-                  class="text-(--color-primary) font-medium hover:underline break-all"
-                >{{ email }}</a>
+              <div class="px-4 py-3">
+                <dt class="label">links</dt>
+                <dd class="mt-1 flex gap-4">
+                  <a [href]="github" target="_blank" rel="noopener noreferrer" class="link">github</a>
+                  <a [href]="linkedin" target="_blank" rel="noopener noreferrer" class="link">linkedin</a>
+                  @if (resumeUrl) {
+                    <a [href]="resumeUrl" target="_blank" rel="noopener noreferrer" class="link">cv.pdf</a>
+                  }
+                </dd>
               </div>
-            </div>
-
-            <div class="pt-2 border-t border-(--color-border)">
-              <p class="text-xs text-(--color-text-muted) mb-2 font-medium">Connect</p>
-              <div class="flex flex-wrap gap-3">
-                @for (link of socialLinks; track link.platform) {
-                  <a
-                    [href]="link.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    [attr.aria-label]="link.ariaLabel"
-                    class="text-(--color-primary) font-semibold text-sm hover:underline focus:outline-none focus:ring-2 focus:ring-(--color-primary) rounded"
-                  >{{ link.platform }}</a>
-                }
-              </div>
-            </div>
+            </dl>
           </div>
 
-          <!-- Right — Email CTA -->
-          <div class="rounded-xl border border-(--color-border) bg-(--color-bg) p-6 sm:p-8 flex flex-col items-center justify-center gap-6 text-center">
-
-            <!-- Icon -->
-            <div class="w-16 h-16 rounded-2xl bg-(--color-primary)/10 border border-(--color-primary)/20 flex items-center justify-center">
-              <svg class="w-8 h-8 text-(--color-primary)" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-              </svg>
+          <form class="term-window" (submit)="send($event, 'app')" aria-labelledby="compose-title">
+            <div class="term-titlebar justify-between">
+              <span class="flex items-center gap-3">
+                <span class="term-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                <span id="compose-title">mail --to {{ email }}</span>
+              </span>
             </div>
 
-            <div>
-              <h3 class="text-xl font-bold text-(--color-text) mb-2">Send Me an Email</h3>
-              <p class="text-sm text-(--color-text-muted) leading-relaxed max-w-xs mx-auto">
-                Got a project idea, job offer, or just want to say hi?
-                Drop me a message directly.
-              </p>
+            <div class="space-y-1 p-4 font-mono text-sm sm:p-5">
+              <div class="flex items-center gap-3 border-b border-(--color-border) py-2">
+                <label for="c-name" class="w-20 shrink-0 text-(--color-primary)">from:</label>
+                <input id="c-name" name="name" type="text" autocomplete="name" placeholder="Your name"
+                       class="min-w-0 flex-1 bg-transparent text-(--color-text) outline-none placeholder:text-(--color-text-muted)/70"
+                       [value]="name()" (input)="name.set($any($event.target).value)" />
+              </div>
+              <div class="flex items-center gap-3 border-b border-(--color-border) py-2">
+                <label for="c-subject" class="w-20 shrink-0 text-(--color-primary)">subject:</label>
+                <input id="c-subject" name="subject" type="text" placeholder="Internship opportunity"
+                       class="min-w-0 flex-1 bg-transparent text-(--color-text) outline-none placeholder:text-(--color-text-muted)/70"
+                       [value]="subject()" (input)="subject.set($any($event.target).value)" />
+              </div>
+              <div class="pt-3">
+                <label for="c-body" class="text-(--color-primary)">message:</label>
+                <textarea id="c-body" name="message" rows="6" required placeholder="Hi Akib, …"
+                          class="mt-2 w-full resize-y rounded border border-(--color-border) bg-(--color-bg) p-3 font-sans text-[0.9375rem] leading-relaxed text-(--color-text) outline-none placeholder:text-(--color-text-muted)/70 focus:border-(--color-primary)"
+                          [value]="body()" (input)="body.set($any($event.target).value)"></textarea>
+              </div>
+
+              @if (error()) {
+                <p class="text-(--color-error)" role="alert">error: {{ error() }}</p>
+              }
+              @if (status()) {
+                <p class="text-(--color-text-muted)" role="status">{{ status() }}</p>
+              }
+
+              <div class="flex flex-wrap gap-2 pt-3">
+                <button type="submit" class="btn btn-primary">send via mail app</button>
+                <button type="button" class="btn" (click)="send($event, 'gmail')">open in gmail ↗</button>
+              </div>
             </div>
-
-            <!-- Email address display -->
-            <div class="w-full rounded-lg border border-(--color-border) bg-(--color-surface) px-4 py-3">
-              <p class="text-sm font-mono font-medium text-(--color-text) break-all select-all">{{ email }}</p>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 w-full">
-              <a
-                [href]="mailtoLink"
-                class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-(--color-primary) px-6 py-3 text-sm font-semibold text-white shadow-md transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                aria-label="Open email client to contact Akib"
-              >
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                </svg>
-                Open Email App
-              </a>
-
-              <a
-                [href]="gmailLink"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-(--color-border) bg-(--color-surface) px-6 py-3 text-sm font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-                aria-label="Compose email in Gmail"
-              >
-                <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
-                  <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
-                </svg>
-                Open in Gmail
-              </a>
-            </div>
-
-          </div>
-
+          </form>
         </div>
       </div>
     </section>
   `,
 })
 export class ContactSectionComponent {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   readonly email = EMAIL;
-  readonly mailtoLink = `mailto:${EMAIL}?subject=Hello%20Akib%20%E2%80%94%20Let%27s%20Connect`;
-  readonly gmailLink  = `https://mail.google.com/mail/?view=cm&to=${EMAIL}&su=Hello%20Akib%20%E2%80%94%20Let%27s%20Connect`;
-  readonly socialLinks: SocialLink[] = CONTACT_DATA.socialLinks;
+  readonly github = GITHUB_URL;
+  readonly linkedin = LINKEDIN_URL;
+  readonly location = HERO_DATA.location;
+  readonly resumeUrl = HERO_DATA.resumeUrl;
+
+  readonly name = signal('');
+  readonly subject = signal('');
+  readonly body = signal('');
+  readonly error = signal('');
+  readonly status = signal('');
+  readonly copied = signal(false);
+
+  send(event: Event, via: 'app' | 'gmail'): void {
+    event.preventDefault();
+    if (!this.body().trim()) {
+      this.error.set('message is empty');
+      this.status.set('');
+      return;
+    }
+    this.error.set('');
+    const subject = encodeURIComponent(this.subject().trim() || 'Hello Akib — from your portfolio');
+    const body = encodeURIComponent(this.body().trim() + (this.name().trim() ? `\n\n— ${this.name().trim()}` : ''));
+    if (via === 'gmail') {
+      window.open(`https://mail.google.com/mail/?view=cm&to=${EMAIL}&su=${subject}&body=${body}`, '_blank', 'noopener');
+      this.status.set('opened Gmail in a new tab');
+    } else {
+      window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
+      this.status.set('handed off to your mail app');
+    }
+  }
+
+  async copyEmail(): Promise<void> {
+    if (!this.isBrowser) return;
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      this.copied.set(true);
+      setTimeout(() => this.copied.set(false), 2000);
+    } catch {
+      this.status.set(`copy failed — the address is ${EMAIL}`);
+    }
+  }
 }

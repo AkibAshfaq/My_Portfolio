@@ -1,39 +1,37 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../core/terminal/shell';
+import { TerminalOverlayService } from '../../core/terminal/terminal-overlay.service';
 
+/** Status-bar style footer. */
 @Component({
   selector: 'app-footer',
   standalone: true,
   imports: [RouterLink],
   template: `
-    <footer role="contentinfo" class="border-t border-(--color-border) bg-(--color-surface) py-8">
-      <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-4 text-sm text-(--color-text-muted)">
+    <footer class="border-t border-(--color-border) bg-(--color-surface-2)">
+      <div class="container-page flex flex-col gap-3 py-4 font-mono text-xs text-(--color-text-muted) sm:flex-row sm:items-center sm:justify-between">
+        <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span class="inline-flex items-center gap-2"><span class="status-dot" aria-hidden="true"></span> available</span>
           <span>&copy; {{ currentYear }} Akib Ashfaq</span>
-          <span aria-hidden="true">·</span>
-          <a
-            href="https://github.com/AkibAshfaq"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="hover:text-(--color-primary) transition-colors"
-          >GitHub</a>
-          <span aria-hidden="true">·</span>
-          <a
-            routerLink="/games"
-            class="hover:text-(--color-primary) transition-colors"
-          >🎮 Games</a>
-        </div>
-        <a
-          href="#hero"
-          class="text-sm text-(--color-primary) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) rounded"
-          aria-label="Back to top"
-        >
-          Back to top ↑
-        </a>
+          <span>Angular · SSR · Tailwind</span>
+        </p>
+        <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <a [href]="github" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-primary)">github</a>
+          <a [href]="linkedin" target="_blank" rel="noopener noreferrer" class="hover:text-(--color-primary)">linkedin</a>
+          <a [href]="'mailto:' + email" class="hover:text-(--color-primary)">email</a>
+          <a routerLink="/games" class="hover:text-(--color-primary)">games</a>
+          <button type="button" (click)="overlay.open()" class="hover:text-(--color-primary)">&gt;_ terminal</button>
+          <a href="#main" class="hover:text-(--color-primary)">top ↑</a>
+        </nav>
       </div>
     </footer>
   `,
 })
 export class FooterComponent {
-  currentYear = new Date().getFullYear();
+  readonly overlay = inject(TerminalOverlayService);
+  readonly currentYear = new Date().getFullYear();
+  readonly email = EMAIL;
+  readonly github = GITHUB_URL;
+  readonly linkedin = LINKEDIN_URL;
 }

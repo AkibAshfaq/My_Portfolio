@@ -1,126 +1,80 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ScrollService } from '../../core/services/scroll.service';
 import { GitHubService } from '../../core/services/github.service';
 import { HERO_DATA, PROJECTS_DATA } from '../../core/models/portfolio.data';
-import { HeroCanvasComponent } from '../../shared/components/hero-canvas/hero-canvas.component';
-import type { HeroStat } from '../../core/models/portfolio.models';
+import { TerminalComponent } from '../../shared/components/terminal/terminal.component';
 
 @Component({
   selector: 'app-hero-section',
   standalone: true,
-  imports: [HeroCanvasComponent],
+  imports: [TerminalComponent],
   template: `
-    <section
-      id="hero"
-      aria-label="Hero"
-      role="region"
-      class="relative min-h-screen flex items-center justify-center bg-(--color-bg) px-4 sm:px-6 lg:px-8 py-24 lg:py-32 overflow-hidden"
-    >
-      <!-- 3D animated tech background -->
-      <app-hero-canvas />
+    <section id="hero" aria-labelledby="hero-title" class="border-b border-(--color-border) pt-14">
+      <div class="container-page grid items-center gap-10 py-14 lg:grid-cols-[1fr_minmax(0,34rem)] lg:gap-14 lg:py-24">
 
-      <!-- Radial vignette: bg-solid at center → transparent at edges.
-           Keeps the hero text clearly readable while animation shows on the sides. -->
-      <div
-        class="absolute inset-0 z-[1] pointer-events-none"
-        style="background: radial-gradient(ellipse 68% 62% at 50% 44%, var(--color-bg) 0%, color-mix(in oklch, var(--color-bg) 75%, transparent) 38%, color-mix(in oklch, var(--color-bg) 30%, transparent) 62%, transparent 100%)"
-        aria-hidden="true"
-      ></div>
+        <!-- Recruiter summary -->
+        <div>
+          <p class="mb-6 font-mono text-sm text-(--color-text-muted)">~/akib-ashfaq/README.md</p>
 
-      <div class="relative z-10 mx-auto max-w-4xl text-center">
+          @if (hero.openToWork) {
+            <p class="mb-5 inline-flex items-center gap-2.5 rounded border border-(--color-border) bg-(--color-surface) px-3 py-1.5 font-mono text-xs text-(--color-text)">
+              <span class="status-dot" aria-hidden="true"></span>
+              Open to internships &amp; entry-level roles
+            </p>
+          }
 
-        @if (hero.openToWork) {
-          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-sm font-semibold text-green-600 dark:text-green-400">
-            <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse" aria-hidden="true"></span>
-            Open to Opportunities
+          <h1 id="hero-title" class="text-4xl font-semibold text-(--color-text) sm:text-5xl lg:text-6xl">
+            {{ hero.name }}<span class="cursor-blink ml-2" aria-hidden="true"></span>
+          </h1>
+          <p class="mt-4 font-mono text-lg text-(--color-primary) sm:text-xl">{{ hero.title }} — Backend &amp; Full-Stack</p>
+          <p class="mt-4 max-w-xl text-lg leading-relaxed text-(--color-text-muted)">{{ hero.tagline }}</p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            @if (hero.resumeUrl) {
+              <a [href]="hero.resumeUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
+                Download CV
+              </a>
+            }
+            <button type="button" class="btn" (click)="scroll.scrollTo('projects')">View projects</button>
+            <button type="button" class="btn" (click)="scroll.scrollTo('contact')">Contact</button>
           </div>
-        }
 
-        <h1 class="mb-4 text-5xl font-extrabold tracking-tight text-(--color-text) sm:text-6xl lg:text-7xl xl:text-8xl">
-          {{ hero.name }}
-        </h1>
-
-        <p class="mb-4 text-xl font-medium text-(--color-primary) sm:text-2xl">
-          {{ hero.title }}
-        </p>
-
-        <p class="mb-10 text-lg leading-relaxed text-(--color-text-muted) sm:text-xl">
-          {{ hero.tagline }}
-        </p>
-
-        <div class="flex flex-col items-center justify-center gap-4 sm:flex-row mb-12">
-          <button
-            type="button"
-            (click)="scrollService.scrollTo('projects')"
-            class="inline-flex items-center rounded-xl bg-(--color-primary) px-8 py-3 text-base font-semibold text-white shadow-md transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) focus-visible:ring-offset-2"
-          >
-            View My Work
-          </button>
-
-          @if (hero.resumeUrl) {
-            <a
-              [href]="hero.resumeUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center rounded-xl border border-(--color-border) bg-(--color-surface) px-8 py-3 text-base font-semibold text-(--color-text) shadow-sm transition-colors hover:bg-(--color-bg) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) focus-visible:ring-offset-2"
-            >
-              Download Résumé
-            </a>
-          }
+          <dl class="mt-10 grid max-w-xl grid-cols-2 gap-x-6 gap-y-4 border-t border-(--color-border) pt-6 sm:grid-cols-4">
+            @for (fact of facts(); track fact.label) {
+              <div>
+                <dt class="label">{{ fact.label }}</dt>
+                <dd class="mt-1 font-mono text-sm text-(--color-text)">{{ fact.value }}</dd>
+              </div>
+            }
+          </dl>
         </div>
 
-        <!-- Dynamic stats row -->
-        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-(--color-text-muted)">
-          @for (stat of stats(); track stat.label) {
-            <div class="flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-(--color-primary)" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                @for (d of stat.paths; track d) {
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="d"/>
-                }
-              </svg>
-              <span>{{ stat.label }}</span>
-            </div>
-          }
+        <!-- Interactive shell -->
+        <div class="term-window flex h-[26rem] flex-col shadow-xl shadow-black/10 sm:h-[30rem]">
+          <div class="term-titlebar justify-between">
+            <span class="flex items-center gap-3">
+              <span class="term-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+              akib&#64;portfolio — interactive résumé
+            </span>
+            <span class="hidden sm:inline">try: help</span>
+          </div>
+          <app-terminal class="min-h-0 flex-1" label="Interactive résumé terminal" [bootCommands]="['whoami']" />
         </div>
-
-      </div><!-- /z-10 content -->
+      </div>
     </section>
   `,
 })
 export class HeroSectionComponent {
-  readonly scrollService = inject(ScrollService);
+  readonly scroll = inject(ScrollService);
   readonly hero = HERO_DATA;
+  private readonly gh = toSignal(inject(GitHubService).stats$);
 
-  private readonly ghStats = toSignal(inject(GitHubService).stats$);
-
-  readonly stats = computed<HeroStat[]>(() => {
-    const gh = this.ghStats();
-    return [
-      {
-        label: `${PROJECTS_DATA.length}+ Projects Built`,
-        paths: [
-          'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z',
-          'M3 9l9 6 9-6',
-        ],
-      },
-      {
-        label: `${gh?.languageCount ?? '…'} Languages`,
-        paths: ['M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4'],
-      },
-      {
-        label: `${gh?.publicRepos ?? '…'} Repos on GitHub`,
-        paths: [
-          'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
-        ],
-      },
-      {
-        label: HERO_DATA.location,
-        paths: [
-          'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z',
-          'M15 11a3 3 0 11-6 0 3 3 0 016 0z',
-        ],
-      },
-    ];
-  });
+  readonly facts = () => [
+    { label: 'Location', value: 'Dhaka, BD' },
+    { label: 'Education', value: 'AIUB' },
+    { label: 'Projects', value: `${PROJECTS_DATA.length}+ built` },
+    { label: 'GitHub', value: `${this.gh()?.publicRepos ?? '—'} repos` },
+  ];
 }

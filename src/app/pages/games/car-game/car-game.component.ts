@@ -78,7 +78,7 @@ type CarGameState = 'idle' | 'playing' | 'gameover';
               <p class="text-xl font-extrabold text-white">Road Rush</p>
               <p class="text-xs text-gray-300 text-center px-6">Dodge traffic · Survive as long as you can</p>
               <button type="button" (click)="startGame()"
-                class="mt-2 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                class="mt-2 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-(--color-on-primary) transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 Start Game
               </button>
             }
@@ -90,7 +90,7 @@ type CarGameState = 'idle' | 'playing' | 'gameover';
                 <p class="text-xs font-semibold text-yellow-400">New Best!</p>
               }
               <button type="button" (click)="startGame()"
-                class="mt-1 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                class="mt-1 rounded-xl bg-(--color-primary) px-7 py-2.5 text-sm font-semibold text-(--color-on-primary) transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 Play Again
               </button>
             }
@@ -102,11 +102,11 @@ type CarGameState = 'idle' | 'playing' | 'gameover';
       <div class="flex items-center gap-4 md:hidden w-full" style="max-width:400px">
         <button
           (pointerdown)="moveLeft()" (contextmenu)="$event.preventDefault()"
-          class="flex-1 rounded-xl bg-(--color-surface) border border-(--color-border) py-4 text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-white transition-colors"
+          class="flex-1 rounded-xl bg-(--color-surface) border border-(--color-border) py-4 text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-(--color-on-primary) transition-colors"
           aria-label="Move left">◀</button>
         <button
           (pointerdown)="moveRight()" (contextmenu)="$event.preventDefault()"
-          class="flex-1 rounded-xl bg-(--color-surface) border border-(--color-border) py-4 text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-white transition-colors"
+          class="flex-1 rounded-xl bg-(--color-surface) border border-(--color-border) py-4 text-2xl font-bold text-(--color-text) active:bg-(--color-primary) active:text-(--color-on-primary) transition-colors"
           aria-label="Move right">▶</button>
       </div>
 

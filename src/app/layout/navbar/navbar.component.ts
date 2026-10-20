@@ -7,8 +7,10 @@ import {
   signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 import { ScrollService } from '../../core/services/scroll.service';
+import { TerminalOverlayService } from '../../core/terminal/terminal-overlay.service';
 import { SectionId } from '../../core/models/portfolio.models';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 
@@ -18,133 +20,142 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
   imports: [ThemeToggleComponent, RouterLink],
   template: `
     <nav
-      role="navigation"
       aria-label="Main navigation"
-      class="fixed top-0 left-0 right-0 z-50 bg-(--color-bg)/90 backdrop-blur border-b border-(--color-border)"
+      class="fixed inset-x-0 top-0 z-50 border-b border-(--color-border) bg-(--color-bg)/92 backdrop-blur"
     >
-      <a
-        href="#hero"
-        class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-(--color-primary) focus:text-white focus:rounded"
-      >
-        Skip to main content
-      </a>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="container-page flex h-14 items-center justify-between gap-4">
         <a
           routerLink="/"
-          class="font-bold text-(--color-text) text-lg hover:text-(--color-primary) transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary) rounded"
+          class="font-mono text-sm font-medium text-(--color-text) hover:text-(--color-primary)"
+          aria-label="Akib Ashfaq — home"
         >
-          Akib Ashfaq
+          <span class="text-(--color-primary)">akib</span><span class="text-(--color-text-muted)">&#64;portfolio:</span><span class="text-(--color-info)">~</span><span class="text-(--color-text-muted)">$</span>
         </a>
 
-        <div class="hidden md:flex items-center gap-1">
+        <ul class="hidden items-center gap-1 md:flex">
           @for (link of SECTION_LINKS; track link.id) {
-            <button
-              type="button"
-              (click)="handleNavClick(link.id)"
-              [attr.aria-label]="link.label"
-              [class]="activeSection() === link.id
-                ? 'text-(--color-primary) font-semibold text-sm px-3 py-1.5 rounded-lg transition-colors'
-                : 'text-(--color-text-muted) hover:text-(--color-text) font-medium text-sm px-3 py-1.5 rounded-lg transition-colors'"
-            >{{ link.label }}</button>
+            <li>
+              <button
+                type="button"
+                (click)="handleNavClick(link.id)"
+                [attr.aria-current]="activeSection() === link.id ? 'location' : null"
+                class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] transition-colors"
+                [class]="activeSection() === link.id
+                  ? 'text-(--color-primary) bg-(--color-surface-2)'
+                  : 'text-(--color-text-muted) hover:text-(--color-text)'"
+              >./{{ link.label }}</button>
+            </li>
           }
-
-          <a
-            routerLink="/games"
-            class="ml-2 inline-flex items-center gap-1.5 rounded-lg border border-(--color-border) bg-(--color-surface) px-3 py-1.5 text-sm font-semibold text-(--color-text) transition-colors hover:bg-(--color-primary) hover:text-white hover:border-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
-          >
-            <span aria-hidden="true">🎮</span> Games
-          </a>
-        </div>
+          <li>
+            <a routerLink="/games" class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] text-(--color-text-muted) hover:text-(--color-text)">./games</a>
+          </li>
+        </ul>
 
         <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-sm"
+            (click)="overlay.toggle()"
+            [attr.aria-expanded]="overlay.isOpen()"
+            aria-label="Open terminal (shortcut: backtick key)"
+          >
+            <span class="text-(--color-primary)" aria-hidden="true">&gt;_</span>
+            <span class="hidden sm:inline">terminal</span>
+            <kbd class="hidden rounded border border-(--color-border) px-1 text-[0.6875rem] text-(--color-text-muted) lg:inline">\`</kbd>
+          </button>
           <app-theme-toggle />
           <button
             type="button"
-            class="md:hidden p-2 rounded-lg text-(--color-text) hover:bg-(--color-surface) transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-primary)"
+            class="btn btn-sm w-9 px-0 md:hidden"
             (click)="menuOpen.update(v => !v)"
             [attr.aria-label]="menuOpen() ? 'Close navigation menu' : 'Open navigation menu'"
             [attr.aria-expanded]="menuOpen()"
           >
             @if (menuOpen()) {
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
             } @else {
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
-              </svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
             }
           </button>
         </div>
       </div>
 
       @if (menuOpen()) {
-        <div class="md:hidden border-t border-(--color-border) bg-(--color-bg) px-4 py-3 flex flex-col gap-1">
+        <ul class="container-page flex flex-col border-t border-(--color-border) py-2 font-mono text-sm md:hidden">
           @for (link of SECTION_LINKS; track link.id) {
-            <button
-              type="button"
-              (click)="handleNavClick(link.id)"
-              [attr.aria-label]="link.label"
-              class="text-left text-(--color-text) hover:text-(--color-primary) font-medium py-2 px-2 rounded-lg transition-colors"
-            >{{ link.label }}</button>
+            <li>
+              <button type="button" (click)="handleNavClick(link.id)"
+                      class="w-full py-2.5 text-left text-(--color-text) hover:text-(--color-primary)">
+                <span class="text-(--color-text-muted)">cd</span> {{ link.label }}/
+              </button>
+            </li>
           }
-          <a
-            routerLink="/games"
-            (click)="menuOpen.set(false)"
-            class="inline-flex items-center gap-2 text-(--color-text) hover:text-(--color-primary) font-medium py-2 px-2 rounded-lg transition-colors"
-          >
-            <span aria-hidden="true">🎮</span> Games
-          </a>
-        </div>
+          <li>
+            <a routerLink="/games" (click)="menuOpen.set(false)" class="block py-2.5 text-(--color-text) hover:text-(--color-primary)">
+              <span class="text-(--color-text-muted)">cd</span> games/
+            </a>
+          </li>
+        </ul>
       }
     </nav>
   `,
 })
 export class NavbarComponent implements AfterViewInit, OnDestroy {
   readonly scrollService = inject(ScrollService);
+  readonly overlay = inject(TerminalOverlayService);
   readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly SECTION_LINKS: { id: SectionId; label: string }[] = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'experience', label: 'Journey' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' },
+    { id: 'about', label: 'about' },
+    { id: 'skills', label: 'skills' },
+    { id: 'experience', label: 'journey' },
+    { id: 'projects', label: 'projects' },
+    { id: 'contact', label: 'contact' },
   ];
 
   activeSection = signal<SectionId>('hero');
   menuOpen = signal(false);
   private observer: IntersectionObserver | null = null;
 
+  constructor() {
+    // Sections are re-created when returning to the home page; re-observe them.
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => {
+        this.activeSection.set('hero');
+        setTimeout(() => this.observeSections());
+      });
+  }
+
   handleNavClick(id: SectionId): void {
     this.menuOpen.set(false);
-    if (this.router.url === '/') {
-      // On home page — smooth-scroll directly
+    if (this.router.url.split('#')[0] === '/') {
       this.scrollService.scrollTo(id);
     } else {
-      // On another page — navigate to home then let anchorScrolling take over
       this.router.navigate(['/'], { fragment: id });
     }
   }
 
   ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const validIds = new Set(this.SECTION_LINKS.map(l => l.id));
-      this.observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting && validIds.has(entry.target.id as SectionId)) {
-              this.activeSection.set(entry.target.id as SectionId);
-            }
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            this.activeSection.set(entry.target.id as SectionId);
           }
-        },
-        { threshold: 0.3 },
-      );
-      document.querySelectorAll('section[id]').forEach(s => this.observer!.observe(s));
-    }
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    this.observeSections();
+  }
+
+  private observeSections(): void {
+    if (!this.observer) return;
+    this.observer.disconnect();
+    document.querySelectorAll('main section[id]').forEach(s => this.observer!.observe(s));
   }
 
   ngOnDestroy(): void {
