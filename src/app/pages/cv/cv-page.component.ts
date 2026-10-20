@@ -80,18 +80,11 @@ import { formatEndDate, sortExperienceEntries } from '../../core/utils/experienc
             <!-- Education -->
             <section aria-labelledby="cv-edu">
               <h2 id="cv-edu" class="cv-h"><span aria-hidden="true">## </span>education</h2>
-              @for (edu of education; track edu.institution) {
-                <p class="flex flex-wrap justify-between gap-x-4">
-                  <span class="text-(--color-info)">{{ edu.institution }}/</span>
-                  <span class="text-(--color-warn)">{{ edu.period }}</span>
-                </p>
-                <p class="text-(--color-text)">{{ edu.degree }}</p>
-                <ul class="tree">
-                  @for (d of edu.details; track d.label) {
-                    <li><span class="text-(--color-text-muted)">{{ d.label }}:</span> {{ d.value }}</li>
-                  }
-                </ul>
-              }
+              <ul class="tree">
+                @for (edu of education; track edu.institution) {
+                  <li>Studied {{ edu.degree }} at <span class="text-(--color-info)">{{ edu.institution }}</span></li>
+                }
+              </ul>
             </section>
 
             <!-- Projects -->
