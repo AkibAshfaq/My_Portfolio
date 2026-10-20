@@ -15,12 +15,11 @@ export const HERO_DATA: HeroData = {
   tagline:
     'I build and maintain large-scale .NET systems, with a focus on clean architecture, performance and maintainable domain models.',
   resumeUrl: '/AkibAshfaq_CV.pdf',
-  company: 'Bdjobs Ltd',
   location: 'Dhaka, Bangladesh',
 };
 
 export const ABOUT_DATA: AboutData = {
-  biography: `As a Software Engineer at Bdjobs Ltd in Dhaka, I contribute to a large-scale, high-traffic platform built on .NET. My work centres on backend engineering: designing APIs, implementing business logic and building data-access layers that perform reliably under production load.
+  biography: `I am a Software Engineer based in Dhaka, contributing to a large-scale, high-traffic platform built on .NET. My work centres on backend engineering: designing APIs, implementing business logic and building data-access layers that perform reliably under production load.
 
 I focus on architecture that stays maintainable as systems and teams grow. I apply modular monolith principles to keep clear module boundaries within a single deployable, and Domain-Driven Design to model complex business domains through bounded contexts, aggregates and a shared ubiquitous language.
 
@@ -361,10 +360,10 @@ export const CONTACT_DATA: ContactData = {
 export const HOME_SEO: SeoConfig = {
   title: 'Akib Ashfaq',
   description:
-    'Akib Ashfaq — Software Engineer at Bdjobs Ltd, Dhaka. .NET, modular monolith and Domain-Driven Design, MongoDB, Redis, large-scale systems.',
+    'Akib Ashfaq — Software Engineer in Dhaka. .NET, modular monolith and Domain-Driven Design, MongoDB, Redis, large-scale systems.',
   ogTitle: 'Akib Ashfaq — Software Engineer (.NET)',
   ogDescription:
-    'Software Engineer at Bdjobs Ltd building large-scale .NET systems with modular monolith architecture and Domain-Driven Design.',
+    'Software Engineer building large-scale .NET systems with modular monolith architecture and Domain-Driven Design.',
   ogImage: 'https://avatars.githubusercontent.com/u/183318977?v=4',
   ogUrl: 'https://akibashfaq.dev',
 };

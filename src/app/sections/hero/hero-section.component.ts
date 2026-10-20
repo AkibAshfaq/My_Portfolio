@@ -19,11 +19,6 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
         <div>
           <p class="mb-6 font-mono text-sm text-(--color-text-muted)">~/akib-ashfaq/README.md</p>
 
-          <p class="mb-5 inline-flex items-center gap-2.5 rounded border border-(--color-border) bg-(--color-surface) px-3 py-1.5 font-mono text-xs text-(--color-text)">
-            <span class="status-dot" aria-hidden="true"></span>
-            {{ hero.title }} &#64; {{ hero.company }}
-          </p>
-
           <h1 id="hero-title" class="text-4xl font-semibold text-(--color-text) sm:text-5xl lg:text-6xl 2xl:text-7xl">
             {{ hero.name }}<span class="cursor-blink ml-2" aria-hidden="true"></span>
           </h1>
@@ -89,7 +84,7 @@ export class HeroSectionComponent {
   private readonly gh = toSignal(inject(GitHubService).stats$);
 
   readonly facts = () => [
-    { label: 'Company', value: HERO_DATA.company },
+    { label: 'Focus', value: 'Backend' },
     { label: 'Stack', value: '.NET · C#' },
     { label: 'Location', value: 'Dhaka, BD' },
     { label: 'GitHub', value: `${this.gh()?.publicRepos ?? '—'} repos` },

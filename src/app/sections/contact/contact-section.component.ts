@@ -38,10 +38,6 @@ import { SectionHeadingComponent } from '../../shared/components/section-heading
                 <dd class="mt-1 text-(--color-text)">{{ location }}</dd>
               </div>
               <div class="px-4 py-3">
-                <dt class="label">currently</dt>
-                <dd class="mt-1 text-(--color-text)">{{ title }} &#64; {{ company }}</dd>
-              </div>
-              <div class="px-4 py-3">
                 <dt class="label">links</dt>
                 <dd class="mt-1 flex gap-4">
                   <a [href]="github" target="_blank" rel="noopener noreferrer" class="link">github</a>
@@ -105,8 +101,6 @@ export class ContactSectionComponent {
   readonly github = GITHUB_URL;
   readonly linkedin = LINKEDIN_URL;
   readonly location = HERO_DATA.location;
-  readonly title = HERO_DATA.title;
-  readonly company = HERO_DATA.company;
 
   readonly name = signal('');
   readonly subject = signal('');
