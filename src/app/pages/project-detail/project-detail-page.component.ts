@@ -1,6 +1,7 @@
 import { Component, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { BackLinkComponent } from '../../shared/components/back-link/back-link.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PROJECTS_DATA } from '../../core/models/portfolio.data';
 import type { Project, ProjectType } from '../../core/models/portfolio.models';
@@ -40,13 +41,11 @@ const RUN_STEPS: Record<ProjectType, { note: string; steps: string[] }> = {
 @Component({
   selector: 'app-project-detail-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [BackLinkComponent],
   template: `
     <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
       <div class="container-page py-12 lg:py-16">
-        <a routerLink="/" fragment="projects" class="btn btn-sm mb-10">
-          <span class="text-(--color-text-muted)">$</span> cd ..
-        </a>
+        <app-back-link class="mb-10 inline-block" fallback="/#projects" />
 
         @if (project; as p) {
           <p class="mb-2 font-mono text-sm text-(--color-text-muted)" aria-hidden="true">
