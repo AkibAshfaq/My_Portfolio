@@ -10,6 +10,7 @@ import type { GitHubStats, SectionId, Theme } from '../models/portfolio.models';
 import { formatEndDate, sortExperienceEntries } from '../utils/experience.utils';
 import { hasDetailPage } from '../utils/project.utils';
 import { search, type SearchTarget } from '../search/search';
+import { APP_VERSION } from '../version';
 
 /** One rendered line of terminal output. */
 export interface ShellLine {
@@ -352,6 +353,7 @@ export const COMMANDS: Record<string, CommandDef> = {
   },
   // ── Hidden conveniences ──────────────────────────────
   pwd: { usage: 'pwd', summary: '', run: () => out('/home/akib/portfolio') },
+  version: { usage: 'version', summary: '', run: () => out(`akib-portfolio v${APP_VERSION}`) },
   date: { usage: 'date', summary: '', run: (_a, ctx) => out(ctx.now().toString()) },
   echo: { usage: 'echo', summary: '', run: args => out(args.join(' ')) },
   resume: { usage: 'resume', summary: '', run: (a, ctx) => COMMANDS['cv'].run(a, ctx) },
@@ -371,7 +373,7 @@ export const COMMANDS: Record<string, CommandDef> = {
   },
 };
 
-const HIDDEN = new Set(['pwd', 'date', 'echo', 'resume', 'exit', 'sudo']);
+const HIDDEN = new Set(['version', 'pwd', 'date', 'echo', 'resume', 'exit', 'sudo']);
 
 /** Splits input on whitespace, respecting "double" or 'single' quotes. */
 export function tokenize(input: string): string[] {

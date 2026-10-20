@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { EMAIL, GITHUB_URL, LINKEDIN_URL } from '../../core/terminal/shell';
 import { TerminalOverlayService } from '../../core/terminal/terminal-overlay.service';
+import { APP_VERSION } from '../../core/version';
 
 /** Status-bar style footer. */
 @Component({
@@ -14,6 +15,7 @@ import { TerminalOverlayService } from '../../core/terminal/terminal-overlay.ser
         <p class="flex flex-wrap items-center gap-x-4 gap-y-1">
           <span class="inline-flex items-center gap-2"><span class="status-dot" aria-hidden="true"></span> online</span>
           <span>&copy; {{ currentYear }} Akib Ashfaq</span>
+          <span>v{{ version }}</span>
           <span>Angular · SSR · Tailwind</span>
         </p>
         <nav aria-label="Footer" class="flex flex-wrap items-center gap-x-4 gap-y-1">
@@ -31,6 +33,7 @@ import { TerminalOverlayService } from '../../core/terminal/terminal-overlay.ser
 export class FooterComponent {
   readonly overlay = inject(TerminalOverlayService);
   readonly currentYear = new Date().getFullYear();
+  readonly version = APP_VERSION;
   readonly email = EMAIL;
   readonly github = GITHUB_URL;
   readonly linkedin = LINKEDIN_URL;
