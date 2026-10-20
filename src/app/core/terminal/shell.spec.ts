@@ -69,4 +69,28 @@ describe('shell', () => {
     expect(complete('cd sk')).toEqual(['cd skills']);
     expect(commonPrefix(['contact', 'cv', 'cd'])).toBe('c');
   });
+
+  it('cv opens the CV page and cv --download opens the PDF', () => {
+    const ctx = fakeCtx();
+    runCommand('cv', ctx);
+    runCommand('cv --download', ctx);
+    expect(ctx.navigate).toHaveBeenCalledWith('/cv');
+    expect(ctx.openUrl).toHaveBeenCalledWith('/AkibAshfaq_CV.pdf');
+  });
+
+  it('opens projects without a detail page where they live', () => {
+    const ctx = fakeCtx();
+    runCommand('open snake', ctx);
+    runCommand('open codeforces', ctx);
+    expect(ctx.navigate).toHaveBeenCalledWith('/games');
+    expect(ctx.openUrl).toHaveBeenCalledWith('https://codeforces.com/profile/AkibAshfaq');
+  });
+
+  it('search lists results and opens one by number', () => {
+    const ctx = fakeCtx();
+    const res = runCommand('search mongodb', ctx);
+    expect(res.lines[0].text).toContain('MongoDB');
+    runCommand('search 1', ctx);
+    expect(ctx.scrollTo).toHaveBeenCalledWith('skills');
+  });
 });

@@ -1,14 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ScrollService } from '../../core/services/scroll.service';
 import { GitHubService } from '../../core/services/github.service';
-import { HERO_DATA } from '../../core/models/portfolio.data';
+import { ABOUT_DATA, HERO_DATA } from '../../core/models/portfolio.data';
 import { TerminalComponent } from '../../shared/components/terminal/terminal.component';
 
 @Component({
   selector: 'app-hero-section',
   standalone: true,
-  imports: [TerminalComponent],
+  imports: [TerminalComponent, RouterLink],
   template: `
     <section id="hero" aria-labelledby="hero-title" class="border-b border-(--color-border) pt-14">
       <div class="container-page grid items-center gap-10 py-14 lg:grid-cols-2 lg:gap-14 lg:py-24 xl:gap-20 2xl:py-32">
@@ -28,13 +29,29 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
           <p class="mt-4 font-mono text-lg text-(--color-primary) sm:text-xl">{{ hero.title }} — .NET &amp; Backend</p>
           <p class="mt-4 max-w-2xl text-lg leading-relaxed text-(--color-text-muted)">{{ hero.tagline }}</p>
 
+          <button
+            type="button"
+            class="mt-3 inline-flex items-center gap-2 font-mono text-sm text-(--color-info) hover:text-(--color-primary)"
+            (click)="bioOpen.update(v => !v)"
+            [attr.aria-expanded]="bioOpen()"
+            aria-controls="hero-bio"
+          >
+            <span aria-hidden="true">{{ bioOpen() ? '▾' : '▸' }}</span>
+            {{ bioOpen() ? 'see less' : 'see more' }}
+          </button>
+          @if (bioOpen()) {
+            <div id="hero-bio" class="mt-4 max-w-2xl space-y-3 border-l-2 border-(--color-border) pl-4 text-[0.9375rem] leading-relaxed text-(--color-text)">
+              @for (para of bio; track $index) {
+                <p>{{ para }}</p>
+              }
+            </div>
+          }
+
           <div class="mt-8 flex flex-wrap gap-3">
-            @if (hero.resumeUrl) {
-              <a [href]="hero.resumeUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
-                Download CV
-              </a>
-            }
+            <a routerLink="/cv" class="btn btn-primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5"/></svg>
+              View CV
+            </a>
             <button type="button" class="btn" (click)="scroll.scrollTo('projects')">View projects</button>
             <button type="button" class="btn" (click)="scroll.scrollTo('contact')">Contact</button>
           </div>
@@ -67,6 +84,8 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
 export class HeroSectionComponent {
   readonly scroll = inject(ScrollService);
   readonly hero = HERO_DATA;
+  readonly bio = ABOUT_DATA.biography.split('\n\n');
+  readonly bioOpen = signal(false);
   private readonly gh = toSignal(inject(GitHubService).stats$);
 
   readonly facts = () => [

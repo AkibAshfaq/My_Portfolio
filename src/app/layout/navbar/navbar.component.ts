@@ -7,17 +7,18 @@ import {
   signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { ScrollService } from '../../core/services/scroll.service';
 import { TerminalOverlayService } from '../../core/terminal/terminal-overlay.service';
+import { SearchOverlayService } from '../../core/search/search-overlay.service';
 import { SectionId } from '../../core/models/portfolio.models';
 import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [ThemeToggleComponent, RouterLink],
+  imports: [ThemeToggleComponent, RouterLink, RouterLinkActive],
   template: `
     <nav
       aria-label="Main navigation"
@@ -47,11 +48,24 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
             </li>
           }
           <li>
-            <a routerLink="/games" class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] text-(--color-text-muted) hover:text-(--color-text)">./games</a>
+            <a routerLink="/cv" routerLinkActive="text-(--color-primary) bg-(--color-surface-2)" class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] text-(--color-text-muted) hover:text-(--color-text)">./cv</a>
+          </li>
+          <li>
+            <a routerLink="/games" routerLinkActive="text-(--color-primary) bg-(--color-surface-2)" class="rounded px-2.5 py-1.5 font-mono text-[0.8125rem] text-(--color-text-muted) hover:text-(--color-text)">./games</a>
           </li>
         </ul>
 
         <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-sm"
+            (click)="searchOverlay.open()"
+            aria-label="Search the site (shortcut: slash or Ctrl+K)"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="hidden xl:inline">search</span>
+            <kbd class="hidden rounded border border-(--color-border) px-1 text-[0.6875rem] text-(--color-text-muted) lg:inline">/</kbd>
+          </button>
           <button
             type="button"
             class="btn btn-sm"
@@ -91,6 +105,11 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
             </li>
           }
           <li>
+            <a routerLink="/cv" (click)="menuOpen.set(false)" class="block py-2.5 text-(--color-text) hover:text-(--color-primary)">
+              <span class="text-(--color-text-muted)">cd</span> cv/
+            </a>
+          </li>
+          <li>
             <a routerLink="/games" (click)="menuOpen.set(false)" class="block py-2.5 text-(--color-text) hover:text-(--color-primary)">
               <span class="text-(--color-text-muted)">cd</span> games/
             </a>
@@ -103,11 +122,11 @@ import { ThemeToggleComponent } from './theme-toggle/theme-toggle.component';
 export class NavbarComponent implements AfterViewInit, OnDestroy {
   readonly scrollService = inject(ScrollService);
   readonly overlay = inject(TerminalOverlayService);
+  readonly searchOverlay = inject(SearchOverlayService);
   readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly SECTION_LINKS: { id: SectionId; label: string }[] = [
-    { id: 'about', label: 'about' },
     { id: 'skills', label: 'skills' },
     { id: 'experience', label: 'experience' },
     { id: 'projects', label: 'projects' },

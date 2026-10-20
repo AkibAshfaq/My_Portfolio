@@ -197,6 +197,31 @@
   .link:hover {
     text-decoration-color: currentColor;
   }
+  /* `tree`-style list: ├── item … └── last item */
+  .tree > li {
+    position: relative;
+    padding-left: 2.25rem;
+    color: var(--color-text);
+  }
+  .tree > li::before {
+    content: '├──';
+    position: absolute;
+    left: 0;
+    color: var(--color-text-muted);
+  }
+  .tree > li:last-child::before {
+    content: '└──';
+  }
+  .cv-h {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: lowercase;
+  }
+
   .status-dot {
     display: inline-block;
     width: 0.5rem;
