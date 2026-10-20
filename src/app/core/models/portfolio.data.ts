@@ -20,11 +20,11 @@ export const HERO_DATA: HeroData = {
 };
 
 export const ABOUT_DATA: AboutData = {
-  biography: `I'm a Software Engineer at Bdjobs Ltd in Dhaka, Bangladesh, where I work on a large-scale, high-traffic platform built on .NET. My day-to-day work is backend engineering: designing APIs, server-side logic and data access that hold up under real production load.
+  biography: `As a Software Engineer at Bdjobs Ltd in Dhaka, I contribute to a large-scale, high-traffic platform built on .NET. My work centres on backend engineering: designing APIs, implementing business logic and building data-access layers that perform reliably under production load.
 
-I care about architecture that stays maintainable as a system grows. I work with modular monolith design, keeping clear module boundaries inside a single deployable, and with Domain-Driven Design to model the business with bounded contexts, aggregates and a shared ubiquitous language.
+I focus on architecture that stays maintainable as systems and teams grow. I apply modular monolith principles to keep clear module boundaries within a single deployable, and Domain-Driven Design to model complex business domains through bounded contexts, aggregates and a shared ubiquitous language.
 
-My toolbox centres on C# and .NET, with MongoDB and SQL Server for persistence, Redis for caching, and a Git Flow branching workflow for disciplined releases. Outside work I study at AIUB, solve algorithmic problems on Codeforces and experiment with IoT hardware like the ESP32.`
+My core stack is C# and ASP.NET Core, with MongoDB and SQL Server for persistence and Redis for caching, delivered through a disciplined Git Flow release process. I am completing a BSc in Computer Science and Engineering at AIUB (CGPA 3.82/4.00) and continue to sharpen my problem-solving through competitive programming.`
 };
 
 export const SKILLS_DATA: SkillCategory[] = [

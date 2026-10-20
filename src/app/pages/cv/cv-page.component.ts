@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { BackLinkComponent } from '../../shared/components/back-link/back-link.component';
 import { ABOUT_DATA, EXPERIENCE_DATA, HERO_DATA, HOME_SEO } from '../../core/models/portfolio.data';
 import {
   CV_COURSES,
@@ -18,12 +18,12 @@ import { formatEndDate, sortExperienceEntries } from '../../core/utils/experienc
 @Component({
   selector: 'app-cv-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [BackLinkComponent],
   template: `
     <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
       <div class="container-page py-12 lg:py-16">
         <div class="mb-10 flex flex-wrap items-center justify-between gap-3">
-          <a routerLink="/" class="btn btn-sm"><span class="text-(--color-text-muted)">$</span> cd ~</a>
+          <app-back-link fallback="/" />
           <a [href]="pdfUrl" [attr.download]="pdfName" class="btn btn-primary">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>
             Download PDF

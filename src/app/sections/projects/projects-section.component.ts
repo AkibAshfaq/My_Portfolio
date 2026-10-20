@@ -1,4 +1,5 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { UiStateService } from '../../core/services/ui-state.service';
 import { PROJECTS_DATA, PROJECT_CATEGORIES } from '../../core/models/portfolio.data';
 import type { ProjectType } from '../../core/models/portfolio.models';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
@@ -22,11 +23,10 @@ const INITIAL_COUNT = 6;
             <select
               id="project-category"
               class="btn appearance-none pr-9 text-(--color-text)"
-              [value]="category()"
               (change)="selectCategory($any($event.target).value)"
             >
               @for (c of categories; track c.value) {
-                <option [value]="c.value">{{ c.label }} ({{ countFor(c.value) }})</option>
+                <option [value]="c.value" [selected]="c.value === category()">{{ c.label }} ({{ countFor(c.value) }})</option>
               }
             </select>
             <svg class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-(--color-text-muted)" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
@@ -59,8 +59,10 @@ const INITIAL_COUNT = 6;
 export class ProjectsSectionComponent {
   readonly categories = PROJECT_CATEGORIES;
   readonly initialCount = INITIAL_COUNT;
-  readonly category = signal<ProjectType | 'all'>('all');
-  readonly expanded = signal(false);
+  private readonly ui = inject(UiStateService);
+  /** Kept in a service so the filter survives visiting a project and coming back. */
+  readonly category = this.ui.projectCategory;
+  readonly expanded = this.ui.projectsExpanded;
 
   readonly filtered = computed(() => {
     const c = this.category();

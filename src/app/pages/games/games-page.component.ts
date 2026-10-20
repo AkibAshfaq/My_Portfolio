@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { BackLinkComponent } from '../../shared/components/back-link/back-link.component';
 import { SnakeGameComponent } from './snake-game/snake-game.component';
 import { MarioGameComponent } from './mario-game/mario-game.component';
 import { CarGameComponent } from './car-game/car-game.component';
@@ -7,11 +7,11 @@ import { CarGameComponent } from './car-game/car-game.component';
 @Component({
   selector: 'app-games-page',
   standalone: true,
-  imports: [RouterLink, SnakeGameComponent, MarioGameComponent, CarGameComponent],
+  imports: [BackLinkComponent, SnakeGameComponent, MarioGameComponent, CarGameComponent],
   template: `
     <main id="main" tabindex="-1" class="min-h-screen pt-14 outline-none">
       <div class="container-page py-12 lg:py-16">
-        <a routerLink="/" class="btn btn-sm mb-10"><span class="text-(--color-text-muted)">$</span> cd ~</a>
+        <app-back-link class="mb-10 inline-block" fallback="/" />
 
         <p class="mb-2 font-mono text-sm text-(--color-text-muted)" aria-hidden="true">
           <span class="text-(--color-primary)">akib&#64;portfolio</span>:<span class="text-(--color-info)">~/games</span>$

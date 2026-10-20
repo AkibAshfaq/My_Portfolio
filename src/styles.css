@@ -222,6 +222,21 @@
     text-transform: lowercase;
   }
 
+  /* Inline "see more…" link at the end of a paragraph */
+  .see-more {
+    margin-left: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    color: var(--color-info);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .see-more:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   .status-dot {
     display: inline-block;
     width: 0.5rem;

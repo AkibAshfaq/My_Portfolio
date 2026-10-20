@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { UiStateService } from '../../core/services/ui-state.service';
 import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ScrollService } from '../../core/services/scroll.service';
@@ -27,22 +28,21 @@ import { TerminalComponent } from '../../shared/components/terminal/terminal.com
             {{ hero.name }}<span class="cursor-blink ml-2" aria-hidden="true"></span>
           </h1>
           <p class="mt-4 font-mono text-lg text-(--color-primary) sm:text-xl">{{ hero.title }} — .NET &amp; Backend</p>
-          <p class="mt-4 max-w-2xl text-lg leading-relaxed text-(--color-text-muted)">{{ hero.tagline }}</p>
-
-          <button
-            type="button"
-            class="mt-3 inline-flex items-center gap-2 font-mono text-sm text-(--color-info) hover:text-(--color-primary)"
-            (click)="bioOpen.update(v => !v)"
-            [attr.aria-expanded]="bioOpen()"
-            aria-controls="hero-bio"
-          >
-            <span aria-hidden="true">{{ bioOpen() ? '▾' : '▸' }}</span>
-            {{ bioOpen() ? 'see less' : 'see more' }}
-          </button>
+          <p class="mt-4 max-w-2xl text-lg leading-relaxed text-(--color-text-muted)">
+            {{ hero.tagline }}
+            @if (!bioOpen()) {
+              <button type="button" class="see-more" (click)="bioOpen.set(true)" aria-expanded="false" aria-controls="hero-bio">see more…</button>
+            }
+          </p>
           @if (bioOpen()) {
-            <div id="hero-bio" class="mt-4 max-w-2xl space-y-3 border-l-2 border-(--color-border) pl-4 text-[0.9375rem] leading-relaxed text-(--color-text)">
+            <div id="hero-bio" class="mt-4 max-w-2xl space-y-3 text-[0.9375rem] leading-relaxed text-(--color-text)">
               @for (para of bio; track $index) {
-                <p>{{ para }}</p>
+                <p>
+                  {{ para }}
+                  @if ($last) {
+                    <button type="button" class="see-more" (click)="bioOpen.set(false)" aria-expanded="true" aria-controls="hero-bio">see less</button>
+                  }
+                </p>
               }
             </div>
           }
@@ -85,7 +85,7 @@ export class HeroSectionComponent {
   readonly scroll = inject(ScrollService);
   readonly hero = HERO_DATA;
   readonly bio = ABOUT_DATA.biography.split('\n\n');
-  readonly bioOpen = signal(false);
+  readonly bioOpen = inject(UiStateService).bioOpen;
   private readonly gh = toSignal(inject(GitHubService).stats$);
 
   readonly facts = () => [
