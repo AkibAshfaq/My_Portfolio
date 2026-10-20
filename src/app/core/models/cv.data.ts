@@ -58,7 +58,7 @@ export const CV_PROJECTS: CvProject[] = [
     points: [
       'Built a server-side rendered personal portfolio with Angular 21, TypeScript and Tailwind CSS; Lighthouse SEO/Performance ≥ 90 and WCAG 2.1 AA accessible across screen sizes.',
       'Designed a typed, data-driven architecture with reusable services and an automated test suite.',
-      'Built canvas-based browser games in TypeScript, plus a contact form and persistent dark/light theming.',
+      'Built terminal-style ASCII browser games in TypeScript, plus a contact form and persistent dark/light theming.',
       'Used Claude AI to assist development and rapidly learn Angular and Tailwind CSS.',
       'Deployed through Vercel at www.akibashfaq.com.',
     ],

@@ -8,7 +8,8 @@ import {
 } from '../models/portfolio.data';
 import type { GitHubStats, SectionId, Theme } from '../models/portfolio.models';
 import { formatEndDate, sortExperienceEntries } from '../utils/experience.utils';
-import { hasDetailPage } from '../utils/project.utils';
+import { hasDetailPage, playUrl } from '../utils/project.utils';
+import { GAMES } from '../games/games.registry';
 import { search, type SearchTarget } from '../search/search';
 import { APP_VERSION } from '../version';
 
@@ -107,8 +108,8 @@ function openTarget(target: string, ctx: ShellContext): ShellResult {
     if (hasDetailPage(project)) {
       return goTo({ kind: 'route', path: `/projects/${project.slug}` }, ctx);
     }
-    if (project.playRoute) {
-      return goTo({ kind: 'route', path: project.playRoute }, ctx);
+    if (project.playId) {
+      return goTo({ kind: 'route', path: playUrl(project.playId) }, ctx);
     }
     const link = project.profileUrl ?? project.repoUrl ?? project.demoUrl;
     if (link) {
@@ -320,11 +321,29 @@ export const COMMANDS: Record<string, CommandDef> = {
   },
   games: {
     usage: 'games',
-    summary: 'Play the browser games I built',
+    summary: 'Open the games page',
     run: (_args, ctx) => {
       ctx.navigate('/games');
       ctx.close();
       return out({ text: 'Launching ~/games …', tone: 'muted' });
+    },
+  },
+  play: {
+    usage: 'play <game>',
+    summary: 'Launch a text-mode game',
+    run: (args, ctx) => {
+      const want = args[0]?.toLowerCase();
+      const game = GAMES.find(g => g.id === want || g.bin === want || g.title.toLowerCase() === args.join(' ').toLowerCase());
+      if (!game) {
+        return out(
+          ...(want ? [{ text: `play: no such game '${args[0]}'`, tone: 'error' as const }] : []),
+          { text: 'Available games', tone: 'accent' },
+          ...GAMES.map(g => ({ text: `  ${pad(g.id, 8)} ${g.title} — ${g.description}`, run: `play ${g.id}` })),
+        );
+      }
+      ctx.navigate(playUrl(game.id));
+      ctx.close();
+      return out({ text: `exec ./${game.bin} …`, tone: 'muted' });
     },
   },
   theme: {
@@ -410,6 +429,7 @@ export function complete(input: string): string[] {
     cd: [...Object.keys(SECTIONS).filter(s => s !== '~' && s !== 'hero'), 'games'],
     open: [...PROJECTS_DATA.map(p => p.slug), 'cv', 'email', ...Object.keys(LINKS)],
     theme: ['light', 'dark'],
+    play: GAMES.map(g => g.id),
   };
   const head = tokens.slice(0, -1).join(' ');
   return (pool[cmd] ?? []).filter(o => o.startsWith(partial)).map(o => `${head} ${o}`);

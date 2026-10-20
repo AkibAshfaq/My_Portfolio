@@ -52,8 +52,8 @@ export interface Project {
   architecture?: string;
   features?: string[];
   projectType: ProjectType;
-  /** In-site route for something playable, e.g. '/games'. */
-  playRoute?: string;
+  /** Id of a game on /games (see core/games/games.registry.ts). */
+  playId?: string;
   /** External profile page (e.g. Codeforces). */
   profileUrl?: string;
 }

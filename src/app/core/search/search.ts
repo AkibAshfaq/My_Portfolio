@@ -1,7 +1,7 @@
 import { EXPERIENCE_DATA, PROJECTS_DATA, PROJECT_CATEGORIES, SKILLS_DATA } from '../models/portfolio.data';
 import { CV_COURSES, CV_EDUCATION, CV_PROJECTS } from '../models/cv.data';
 import type { SectionId } from '../models/portfolio.models';
-import { hasDetailPage } from '../utils/project.utils';
+import { hasDetailPage, playUrl } from '../utils/project.utils';
 
 export type SearchTarget =
   | { kind: 'section'; id: SectionId }
@@ -28,7 +28,7 @@ function buildIndex(): SearchItem[] {
     { title: 'Projects', subtitle: 'All projects by category', group: 'Sections', keywords: 'portfolio work side projects beyond the code', target: section('projects') },
     { title: 'Contact', subtitle: 'Email, links and message composer', group: 'Sections', keywords: 'email mail hire reach message', target: section('contact') },
     { title: 'CV', subtitle: 'Full CV with PDF download', group: 'Pages', keywords: 'resume curriculum vitae pdf download education', target: route('/cv') },
-    { title: 'Games', subtitle: 'Snake, Mario Run and Road Rush', group: 'Pages', keywords: 'play canvas fun', target: route('/games') },
+    { title: 'Games', subtitle: 'Snake, Mario Run and Road Rush', group: 'Pages', keywords: 'play ascii terminal fun snake mario road', target: route('/games') },
     { title: 'Email', subtitle: 'akibash.dev@gmail.com', group: 'Contact', keywords: 'mail contact', target: section('contact') },
     { title: 'GitHub', subtitle: 'github.com/AkibAshfaq', group: 'Contact', keywords: 'code repos source', target: url('https://github.com/AkibAshfaq') },
     { title: 'LinkedIn', subtitle: 'linkedin.com/in/akib-ashfaq-dev', group: 'Contact', keywords: 'profile network', target: url('https://www.linkedin.com/in/akib-ashfaq-dev') },
@@ -38,8 +38,8 @@ function buildIndex(): SearchItem[] {
     const category = PROJECT_CATEGORIES.find(c => c.value === p.projectType)?.label ?? '';
     const target = hasDetailPage(p)
       ? route(`/projects/${p.slug}`)
-      : p.playRoute
-        ? route(p.playRoute)
+      : p.playId
+        ? route(playUrl(p.playId))
         : url((p.profileUrl ?? p.repoUrl ?? p.demoUrl)!);
     items.push({
       title: p.name,
