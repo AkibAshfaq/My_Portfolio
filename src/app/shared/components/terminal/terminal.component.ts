@@ -133,6 +133,15 @@ export class TerminalComponent implements OnInit, AfterViewInit {
         window.open(url, url.startsWith('mailto:') ? '_self' : '_blank', 'noopener');
       }
     },
+    download: (url, filename) => {
+      if (!this.isBrowser) return;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    },
     setTheme: t => this.themeService.set(t),
     theme: () => this.themeService.theme(),
     close: () => this.closed.emit(),

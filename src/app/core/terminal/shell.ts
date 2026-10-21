@@ -34,6 +34,8 @@ export interface ShellContext {
   scrollTo(section: SectionId): void;
   navigate(path: string): void;
   openUrl(url: string): void;
+  /** Saves a file to the visitor's downloads (rather than opening it). */
+  download(url: string, filename: string): void;
   setTheme(theme: Theme): void;
   theme(): Theme;
   close(): void;
@@ -133,6 +135,28 @@ function goTo(target: SearchTarget, ctx: ShellContext): ShellResult {
       ctx.openUrl(target.url);
       return out({ text: `Opening ${target.url} …`, tone: 'muted' });
   }
+}
+
+/** Names `git clone <name>` accepts for the CV. */
+const CV_REPOS = new Set(['cv', 'cv.pdf', 'resume', 'akibashfaq_cv', 'akibashfaq_cv.pdf', 'akibashfaq/cv']);
+
+/** Downloads the CV PDF and prints git-flavoured progress output. */
+function downloadCv(ctx: ShellContext, how: 'clone' | 'pull' | 'fetch' | 'download'): ShellResult {
+  if (!HERO_DATA.resumeUrl) {
+    return err('fatal: the CV is not available right now');
+  }
+  const file = HERO_DATA.resumeUrl.split('/').pop()!;
+  ctx.download(HERO_DATA.resumeUrl, file);
+  const header =
+    how === 'clone' ? [`Cloning into '${file}'...`]
+    : how === 'download' ? [`Downloading ${file}...`]
+    : ['From akibashfaq.com/cv', ' * branch            main       -> FETCH_HEAD'];
+  return out(
+    ...header.map(text => ({ text, tone: 'muted' as const })),
+    { text: 'remote: Enumerating objects: 1, done.', tone: 'muted' },
+    { text: 'Receiving objects: 100% (1/1), done.', tone: 'muted' },
+    { text: `✓ ${file} saved to your downloads`, tone: 'accent' },
+  );
 }
 
 /** Last results of the `search` command, so `search <n>` can open one. */
@@ -237,7 +261,7 @@ export const COMMANDS: Record<string, CommandDef> = {
           run: `cd ${d}`,
         })),
         { text: 'cv/', tone: 'info' as const, run: 'cv' },
-        { text: 'cv.pdf', run: 'cv --download' },
+        { text: 'cv.pdf', run: 'git clone cv' },
       ),
   },
   cv: {
@@ -245,13 +269,45 @@ export const COMMANDS: Record<string, CommandDef> = {
     summary: 'View my CV, or download the PDF',
     run: (args, ctx) => {
       if (args[0] === '--download' || args[0] === '-d') {
-        if (!HERO_DATA.resumeUrl) {
-          return err('cv: PDF not available right now');
-        }
-        ctx.openUrl(HERO_DATA.resumeUrl);
-        return out({ text: 'Downloading AkibAshfaq_CV.pdf …', tone: 'muted' });
+        return downloadCv(ctx, 'download');
       }
       return goTo({ kind: 'route', path: '/cv' }, ctx);
+    },
+  },
+  git: {
+    usage: 'git clone cv',
+    summary: 'Download my CV, git style',
+    run: (args, ctx) => {
+      const [sub, target] = args.map(a => a.toLowerCase());
+      if (!sub || sub === 'help' || sub === '--help') {
+        return out(
+          { text: 'usage: git <command> [<args>]', tone: 'accent' },
+          { text: '  clone cv     download AkibAshfaq_CV.pdf', run: 'git clone cv' },
+          { text: '  pull cv      same as clone — fetch the latest CV', run: 'git pull cv' },
+          { text: '  log          work experience', run: 'git log' },
+          { text: '  status       what I am working on', run: 'git status' },
+        );
+      }
+      if (sub === 'clone' || sub === 'pull' || sub === 'fetch') {
+        if (!target || !CV_REPOS.has(target.replace(/\.git$/, ''))) {
+          return err(`fatal: repository '${target ?? ''}' not found. Try 'git clone cv'.`);
+        }
+        return downloadCv(ctx, sub);
+      }
+      if (sub === 'log') {
+        return COMMANDS['experience'].run([], ctx);
+      }
+      if (sub === 'status') {
+        return out(
+          'On branch main',
+          "Your branch is up to date with 'origin/main'.",
+          '',
+          { text: `  working on:  ${HERO_DATA.title} · .NET, modular monolith, DDD`, tone: 'info' },
+          '',
+          { text: "nothing to commit — run 'git clone cv' to grab my CV", tone: 'muted' },
+        );
+      }
+      return err(`git: '${sub}' is not a git command. See 'git help'.`);
     },
   },
   search: {
@@ -430,6 +486,7 @@ export function complete(input: string): string[] {
     open: [...PROJECTS_DATA.map(p => p.slug), 'cv', 'email', ...Object.keys(LINKS)],
     theme: ['light', 'dark'],
     play: GAMES.map(g => g.id),
+    git: ['clone cv', 'pull cv', 'log', 'status', 'help'],
   };
   const head = tokens.slice(0, -1).join(' ');
   return (pool[cmd] ?? []).filter(o => o.startsWith(partial)).map(o => `${head} ${o}`);

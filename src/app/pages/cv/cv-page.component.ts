@@ -129,7 +129,8 @@ import { formatEndDate, sortExperienceEntries } from '../../core/utils/experienc
 
             <p class="text-(--color-text-muted)">
               <span class="text-(--color-primary)">akib&#64;portfolio</span>:<span class="text-(--color-info)">~/cv</span>$
-              <a [href]="pdfUrl" [attr.download]="pdfName" class="link">download {{ pdfName }}</a><span class="cursor-blink ml-1" aria-hidden="true"></span>
+              <a [href]="pdfUrl" [attr.download]="pdfName" class="link" [attr.aria-label]="'Download ' + pdfName">git clone cv</a>
+              <span class="text-(--color-text-muted)"># downloads {{ pdfName }}</span><span class="cursor-blink ml-1" aria-hidden="true"></span>
             </p>
           </div>
         </article>
