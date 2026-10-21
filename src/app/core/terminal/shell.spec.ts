@@ -6,6 +6,7 @@ function fakeCtx(overrides: Partial<ShellContext> = {}): ShellContext {
     scrollTo: vi.fn(),
     navigate: vi.fn(),
     openUrl: vi.fn(),
+    download: vi.fn(),
     setTheme: vi.fn(),
     theme: () => 'dark',
     close: vi.fn(),
@@ -75,14 +76,14 @@ describe('shell', () => {
     runCommand('cv', ctx);
     runCommand('cv --download', ctx);
     expect(ctx.navigate).toHaveBeenCalledWith('/cv');
-    expect(ctx.openUrl).toHaveBeenCalledWith('/AkibAshfaq_CV.pdf');
+    expect(ctx.download).toHaveBeenCalledWith('/AkibAshfaq_CV.pdf', 'AkibAshfaq_CV.pdf');
   });
 
   it('opens projects without a detail page where they live', () => {
     const ctx = fakeCtx();
     runCommand('open snake', ctx);
     runCommand('open codeforces', ctx);
-    expect(ctx.navigate).toHaveBeenCalledWith('/games');
+    expect(ctx.navigate).toHaveBeenCalledWith('/games?play=snake#snake');
     expect(ctx.openUrl).toHaveBeenCalledWith('https://codeforces.com/profile/AkibAshfaq');
   });
 
@@ -92,5 +93,31 @@ describe('shell', () => {
     expect(res.lines[0].text).toContain('MongoDB');
     runCommand('search 1', ctx);
     expect(ctx.scrollTo).toHaveBeenCalledWith('skills');
+  });
+
+  it('play launches a game by id or bin name and lists games otherwise', () => {
+    const ctx = fakeCtx();
+    runCommand('play mario-run', ctx);
+    expect(ctx.navigate).toHaveBeenCalledWith('/games?play=mario#mario');
+    const list = runCommand('play', ctx);
+    expect(list.lines.some(l => l.run === 'play road')).toBe(true);
+    expect(complete('play sn')).toEqual(['play snake']);
+  });
+
+  it('git clone cv downloads the CV with git-style output', () => {
+    const ctx = fakeCtx();
+    const res = runCommand('git clone cv', ctx);
+    expect(ctx.download).toHaveBeenCalledWith('/AkibAshfaq_CV.pdf', 'AkibAshfaq_CV.pdf');
+    expect(res.lines[0].text).toBe("Cloning into 'AkibAshfaq_CV.pdf'...");
+    runCommand('git pull resume.git', ctx);
+    expect(ctx.download).toHaveBeenCalledTimes(2);
+  });
+
+  it('git rejects unknown repos and subcommands', () => {
+    const ctx = fakeCtx();
+    expect(runCommand('git clone secrets', ctx).lines[0].tone).toBe('error');
+    expect(runCommand('git push', ctx).lines[0].text).toContain("'push' is not a git command");
+    expect(ctx.download).not.toHaveBeenCalled();
+    expect(complete('git cl')).toEqual(['git clone cv']);
   });
 });
